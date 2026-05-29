@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Solutions", href: "/solutions" },
   { label: "Projects", href: "/projects" },
-  {label: "Shop", href: "/shop"},
+  { label: "Shop", href: "/shop" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
@@ -27,8 +27,9 @@ export default function Navbar() {
               <Image
                 src="/logo.svg"
                 alt="NOBS Logo"
-                width={120}
+                width={160}
                 height={44}
+                style={{ objectFit: "contain" }}
               />
             </div>
           </Link>

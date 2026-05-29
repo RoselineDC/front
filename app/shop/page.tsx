@@ -6,6 +6,7 @@ import { PRODUCTS } from "@/data/products";
 import { Product, ProductCategory } from "@/types/product";
 import ProductCard from "@/components/ProductCard";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const CATEGORIES: { label: string; value: "all" | ProductCategory }[] = [
   { label: "All", value: "all" },
@@ -70,6 +71,7 @@ export default function ShopPage() {
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
       />
+      <Footer />
     </>
   );
 }
