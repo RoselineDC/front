@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg: #FDFDFD;
+  --bg: #F7F7F5;
   --ink: #0D0D0D;
   --sage: #B8E0BA;
   --muted: #6B6B6B;
@@ -45,6 +45,7 @@
   text-decoration: none;
   flex-shrink: 0;
 }
+
 
 .logo-title {
   font-size: 0.9rem;
