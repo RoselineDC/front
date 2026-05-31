@@ -5,7 +5,7 @@ import { FaWhatsapp } from "react-icons/fa";
 const PHONE_NUMBER = "27791475592";
 
 const MESSAGE = encodeURIComponent(
-  "Hello, I need assistance with your services. Please assist."
+  "Good day Network Operations and Broadband Solutions Team, I kindly request assistance with your services."
 );
 
 export default function WhatsAppButton() {
