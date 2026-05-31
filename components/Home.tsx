@@ -44,10 +44,10 @@ export function Hero() {
 
             <h1 className="text-white font-black leading-none tracking-tight">
               <span className="block text-5xl md:text-6xl lg:text-7xl">
-                SMART SOLUTIONS.
+                Network Operations &
               </span>
               <span className="block text-[#7AC943] text-5xl md:text-6xl lg:text-7xl mt-2">
-                SECURE CONNECTIONS.
+                Broadband Technologies.
               </span>
             </h1>
 

@@ -45,7 +45,7 @@ export default function Navbar() {
 
             <div className="flex items-center gap-2">
               <MapPin size={14} className="text-[#7ac943]" />
-              <span>Midrand, South Africa</span>
+              <span>Pretoria, South Africa</span>
             </div>
           </div>
 
