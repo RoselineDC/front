@@ -3,20 +3,21 @@
 @tailwind utilities;
 
 :root {
---primary: #7ac943;
---primary-dark: #6bb53a;
+  --primary: #7ac943;
+  --primary-dark: #67b237;
 
---text: #111827;
---text-light: #6b7280;
+  --text: #111111;
+  --text-light: #6b7280;
 
---background: #ffffff;
---background-soft: #f8fafc;
+  --background: #ffffff;
+  --background-soft: #f5f6f7;
 
---border: #e5e7eb;
+  --border: #e5e7eb;
 
---footer: #0d0d0d;
+  --footer: #111111;
 
---container: 1200px;
+  --radius: 16px;
+  --container: 1280px;
 }
 
 html {
