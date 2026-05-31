@@ -60,14 +60,14 @@ export default function Navbar() {
       {/* Main Navbar */}
       <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
         <div className="container-custom">
-          <div className="flex items-center justify-between h-24">
+          <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link href="/">
               <Image
                 src="/logo.svg"
                 alt="N.O.B.S Technologies"
-                width={220}
-                height={70}
+                width={170}
+                height={55}
                 priority
               />
             </Link>
@@ -100,7 +100,6 @@ export default function Navbar() {
                       )}
                     </Link>
 
-                    {/* Active / Hover Underline */}
                     <span
                       className={`absolute left-0 -bottom-2 h-[2px] bg-[#7ac943] transition-all duration-300 ${
                         isActive
@@ -118,27 +117,21 @@ export default function Navbar() {
                               <Link href="/solutions/cctv" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 CCTV & Surveillance
                               </Link>
-
                               <Link href="/solutions/access-control" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Access Control
                               </Link>
-
                               <Link href="/solutions/networking" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Networking
                               </Link>
-
                               <Link href="/solutions/wireless" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Wireless Links
                               </Link>
-
                               <Link href="/solutions/data-centre" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Data Centre & Power
                               </Link>
-
                               <Link href="/solutions/voip" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 VoIP & Communications
                               </Link>
-
                               <Link href="/solutions/cabling" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Structured Cabling
                               </Link>
@@ -150,23 +143,18 @@ export default function Navbar() {
                               <Link href="/products/cctv" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 CCTV Cameras
                               </Link>
-
                               <Link href="/products/access-control" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Access Control Systems
                               </Link>
-
                               <Link href="/products/networking" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Networking Equipment
                               </Link>
-
                               <Link href="/products/wireless" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Wireless Devices
                               </Link>
-
                               <Link href="/products/power" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Power Solutions
                               </Link>
-
                               <Link href="/products/cabling" className="block px-4 py-3 rounded-lg hover:bg-gray-50">
                                 Cabling & Accessories
                               </Link>
@@ -193,11 +181,7 @@ export default function Navbar() {
                 className="lg:hidden"
                 onClick={() => setMenuOpen(!menuOpen)}
               >
-                {menuOpen ? (
-                  <X size={28} />
-                ) : (
-                  <Menu size={28} />
-                )}
+                <Menu size={28} />
               </button>
             </div>
           </div>
@@ -210,35 +194,46 @@ export default function Navbar() {
           menuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex justify-end p-6">
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <Link href="/" onClick={() => setMenuOpen(false)}>
+            <Image
+              src="/logo.svg"
+              alt="N.O.B.S Technologies"
+              width={140}
+              height={45}
+              priority
+            />
+          </Link>
+
           <button onClick={() => setMenuOpen(false)}>
-            <X size={30} />
+            <X size={28} />
           </button>
         </div>
 
-        <div className="flex flex-col px-8">
-          {NAV_LINKS.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={`py-4 border-b text-lg font-semibold ${
-                pathname === item.href
-                  ? "text-[#7ac943]"
-                  : "text-gray-800"
-              }`}
-              onClick={() => setMenuOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
+        {/* Mobile Navigation */}
+        <div className="flex flex-col px-6">
+          {NAV_LINKS.map((item) => {
+            const isActive =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
 
-          <Link
-            href="/contact"
-            className="mt-8 bg-[#7ac943] text-white text-center py-4 rounded-lg font-semibold"
-            onClick={() => setMenuOpen(false)}
-          >
-            GET A QUOTE
-          </Link>
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className={`py-5 border-b text-base font-semibold transition-colors ${
+                  isActive
+                    ? "text-[#7ac943]"
+                    : "text-gray-800"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </>
