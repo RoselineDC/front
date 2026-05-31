@@ -88,8 +88,8 @@ export default function Navbar() {
                     <Link
                       href={item.href}
                       className={`flex items-center gap-1 text-sm font-semibold transition-colors duration-300 ${isActive
-                          ? "text-[#7ac943]"
-                          : "text-gray-800 hover:text-[#7ac943]"
+                        ? "text-[#7ac943]"
+                        : "text-gray-800 hover:text-[#7ac943]"
                         }`}
                     >
                       {item.label}
@@ -101,8 +101,8 @@ export default function Navbar() {
 
                     <span
                       className={`absolute left-0 -bottom-2 h-[2px] bg-[#7ac943] transition-all duration-300 ${isActive
-                          ? "w-full"
-                          : "w-0 group-hover:w-full"
+                        ? "w-full"
+                        : "w-0 group-hover:w-full"
                         }`}
                     />
 
@@ -170,11 +170,10 @@ export default function Navbar() {
             <div className="flex items-center gap-4">
               <Link
                 href="/contact"
-                className="hidden lg:flex btn-primary"
+                className="hidden lg:inline-flex btn-primary"
               >
                 GET A QUOTE
               </Link>
-
               <button
                 className="lg:hidden"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -223,8 +222,8 @@ export default function Navbar() {
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
                 className={`py-5 border-b text-base font-semibold transition-colors ${isActive
-                    ? "text-[#7ac943]"
-                    : "text-gray-800"
+                  ? "text-[#7ac943]"
+                  : "text-gray-800"
                   }`}
               >
                 {item.label}
