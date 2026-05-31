@@ -130,13 +130,15 @@ export function Hero() {
                   <ArrowRight size={18} />
                 </Link>
 
-                <Link
-                  href="/contact"
-                  className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 mt-4"
-                >
-                  Contact Us
-                  <ArrowRight size={18} />
-                </Link>
+                <a
+  href="https://wa.me/27791475592?text=Hi%20I%20would%20like%20more%20information"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 mt-4 transition-colors"
+>
+  Contact Us
+  <ArrowRight size={18} />
+</a>
               </div>
 
             </div>
