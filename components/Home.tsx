@@ -121,10 +121,10 @@ export function Hero() {
               </div>
 
               {/* MOBILE BUTTONS UNDER IMAGE */}
-              <div className="lg:hidden flex flex-col gap-3 mt-4">
+              <div className="lg:hidden flex flex-col gap-3 mt-14">
                 <Link
                   href="/solutions"
-                  className="bg-[#7AC943] hover:bg-[#69b53a] text-white font-semibold px-4 py-3 rounded-md flex items-center justify-center gap-2"
+                  className="bg-[#7AC943] hover:bg-[#69b53a] text-white font-semibold px-4 py-30 rounded-md flex items-center justify-center gap-2"
                 >
                   Explore Solutions
                   <ArrowRight size={18} />
@@ -132,7 +132,7 @@ export function Hero() {
 
                 <Link
                   href="/contact"
-                  className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2"
+                  className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 mt-6"
                 >
                   Contact Us
                   <ArrowRight size={18} />
