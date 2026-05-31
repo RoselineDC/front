@@ -33,7 +33,7 @@ const services = [
 
 export function Hero() {
   return (
-   <section className="relative overflow-hidden bg-black">
+  <section className="relative overflow-hidden bg-black">
   <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10" />
 
   <div className="relative z-20 max-w-7xl mx-auto px-4">
@@ -85,7 +85,7 @@ export function Hero() {
           })}
         </div>
 
-        {/* DESKTOP BUTTONS */}
+        {/* DESKTOP BUTTONS ONLY */}
         <div className="hidden lg:flex gap-4 mt-12">
           <Link
             href="/solutions"
@@ -98,17 +98,6 @@ export function Hero() {
           <Link
             href="/contact"
             className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-8 py-4 rounded-md font-semibold inline-flex items-center gap-2"
-          >
-            Contact Us
-            <ArrowRight size={18} />
-          </Link>
-        </div>
-
-        {/* MOBILE CONTACT BUTTON */}
-        <div className="lg:hidden mt-6">
-          <Link
-            href="/contact"
-            className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2"
           >
             Contact Us
             <ArrowRight size={18} />
@@ -131,14 +120,24 @@ export function Hero() {
             />
           </div>
 
-          {/* MOBILE EXPLORE BUTTON UNDER IMAGE */}
-          <Link
-            href="/solutions"
-            className="lg:hidden mt-4 bg-[#7AC943] hover:bg-[#69b53a] text-white font-semibold px-4 py-3 rounded-md flex items-center justify-center gap-2"
-          >
-            Explore Solutions
-            <ArrowRight size={18} />
-          </Link>
+          {/* MOBILE BUTTONS UNDER IMAGE */}
+          <div className="lg:hidden flex flex-col gap-3 mt-4">
+            <Link
+              href="/solutions"
+              className="bg-[#7AC943] hover:bg-[#69b53a] text-white font-semibold px-4 py-3 rounded-md flex items-center justify-center gap-2"
+            >
+              Explore Solutions
+              <ArrowRight size={18} />
+            </Link>
+
+            <Link
+              href="/contact"
+              className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2"
+            >
+              Contact Us
+              <ArrowRight size={18} />
+            </Link>
+          </div>
 
         </div>
       </div>
