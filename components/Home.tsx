@@ -132,7 +132,7 @@ export function Hero() {
 
                 <Link
                   href="/contact"
-                  className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 mt-6"
+                  className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 py-3 rounded-md font-semibold flex items-center justify-center gap-2 mt-4"
                 >
                   Contact Us
                   <ArrowRight size={18} />
