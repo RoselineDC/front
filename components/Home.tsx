@@ -34,81 +34,93 @@ const services = [
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-black">
-      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10" />
+  <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10" />
 
-      <div className="relative z-20 max-w-7xl mx-auto px-4">
-        <div className="grid lg:grid-cols-2 min-h-[720px]">
+  <div className="relative z-20 max-w-7xl mx-auto px-4">
+    <div className="grid grid-cols-2 lg:grid-cols-2 min-h-[550px] lg:min-h-[720px] gap-4">
 
-          {/* LEFT */}
-          <div className="flex flex-col justify-center py-20">
+      {/* LEFT */}
+      <div className="flex flex-col justify-center py-8 lg:py-20">
 
-            <h1 className="text-white font-black leading-none tracking-tight">
-              <span className="text-3xl md:text-4xl lg:text-5xl">
-                Network Operations &
-                <span className="block text-[#7AC943] text-4xl md:text-6xl lg:text-6xl mt-2">
-                Broadband 
-              </span>
-              Solutions 
-              </span>
-              <span className="block text-[#7AC943] text-4xl md:text-6xl lg:text-6xl mt-2">
-                Technologies.
-              </span>
-              
-            </h1>
+        <h1 className="text-white font-black leading-none tracking-tight">
+          <span className="text-xl sm:text-2xl md:text-4xl lg:text-5xl">
+            Network Operations &
+          </span>
 
-            <p className="mt-8 text-lg text-white/80 max-w-xl">
-              Professional technology solutions designed to connect, protect and power your world.
-            </p>
+          <span className="block text-[#7AC943] text-2xl sm:text-3xl md:text-6xl lg:text-6xl mt-1 lg:mt-2">
+            Broadband
+          </span>
 
-            {/* SERVICES */}
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-6 mt-12">
-              {services.map((service, i) => {
-                const Icon = service.icon;
-                return (
-                  <div key={i} className="flex flex-col items-center text-center">
-                    <Icon className="text-[#7AC943] mb-3" size={28} />
-                    <span className="text-white text-xs uppercase">
-                      {service.title}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+          <span className="text-xl sm:text-2xl md:text-4xl lg:text-5xl">
+            Solutions
+          </span>
 
-            {/* BUTTONS */}
-            <div className="flex gap-4 mt-12">
-              <Link
-                href="/solutions"
-                className="bg-[#7AC943] hover:bg-[#69b53a] text-white font-semibold px-8 py-4 rounded-md inline-flex items-center gap-2"
+          <span className="block text-[#7AC943] text-2xl sm:text-3xl md:text-6xl lg:text-6xl mt-1 lg:mt-2">
+            Technologies.
+          </span>
+        </h1>
+
+        <p className="mt-4 lg:mt-8 text-sm md:text-lg text-white/80 max-w-xl">
+          Professional technology solutions designed to connect,
+          protect and power your world.
+        </p>
+
+        {/* SERVICES */}
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3 md:gap-6 mt-6 lg:mt-12">
+          {services.map((service, i) => {
+            const Icon = service.icon;
+
+            return (
+              <div
+                key={i}
+                className="flex flex-col items-center text-center"
               >
-                Explore Solutions <ArrowRight size={18} />
-              </Link>
+                <Icon className="text-[#7AC943] mb-2 w-5 h-5 md:w-7 md:h-7" />
 
-              <Link
-                href="/contact"
-                className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-8 py-4 rounded-md font-semibold inline-flex items-center gap-2"
-              >
-                Contact Us <ArrowRight size={18} />
-              </Link>
-            </div>
-          </div>
+                <span className="text-white text-[10px] md:text-xs uppercase">
+                  {service.title}
+                </span>
+              </div>
+            );
+          })}
+        </div>
 
-          {/* RIGHT */}
-          <div className="lg:flex items-center justify-end py-10">
-            <div className="relative w-full max-w-3xl h-[600px] rounded-lg overflow-hidden">
-              <Image
-                src="/images/hero/hero5.png"
-                alt="Technology Infrastructure"
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-          </div>
+        {/* BUTTONS */}
+        <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 mt-6 lg:mt-12">
+          <Link
+            href="/solutions"
+            className="bg-[#7AC943] hover:bg-[#69b53a] text-white font-semibold px-4 lg:px-8 py-3 lg:py-4 rounded-md inline-flex items-center justify-center gap-2"
+          >
+            Explore Solutions
+            <ArrowRight size={18} />
+          </Link>
 
+          <Link
+            href="/contact"
+            className="border border-[#7AC943] text-white hover:bg-[#7AC943] px-4 lg:px-8 py-3 lg:py-4 rounded-md font-semibold inline-flex items-center justify-center gap-2"
+          >
+            Contact Us
+            <ArrowRight size={18} />
+          </Link>
         </div>
       </div>
-    </section>
+
+      {/* RIGHT */}
+      <div className="flex items-center justify-end py-4 lg:py-10">
+        <div className="relative w-full h-[240px] sm:h-[300px] md:h-[450px] lg:h-[600px] rounded-lg overflow-hidden">
+          <Image
+            src="/images/hero/hero5.png"
+            alt="Technology Infrastructure"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
   );
 }
 
