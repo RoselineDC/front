@@ -34,8 +34,15 @@ export default function Navbar() {
         <div className="container-custom flex items-center justify-between py-2 text-sm text-gray-600">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <Phone size={14} className="text-[#7ac943]" />
-              <span>010 023 0378</span>
+              <a
+                href="https://wa.me/27791475592"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-[#7ac943] transition-colors"
+              >
+                <Phone size={14} className="text-[#7ac943]" />
+                <span>079 147 5592</span>
+              </a>
             </div>
 
             <div className="flex items-center gap-2">
@@ -85,20 +92,18 @@ export default function Navbar() {
                   <div key={item.label} className="group relative">
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-1 text-sm font-semibold transition-colors ${
-                        isActive
+                      className={`flex items-center gap-1 text-sm font-semibold transition-colors ${isActive
                           ? "text-[#7ac943]"
                           : "text-gray-800 hover:text-[#7ac943]"
-                      }`}
+                        }`}
                     >
                       {item.label}
                       {item.hasDropdown && <ChevronDown size={15} />}
                     </Link>
 
                     <span
-                      className={`absolute left-0 -bottom-2 h-[2px] bg-[#7ac943] transition-all ${
-                        isActive ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
+                      className={`absolute left-0 -bottom-2 h-[2px] bg-[#7ac943] transition-all ${isActive ? "w-full" : "w-0 group-hover:w-full"
+                        }`}
                     />
 
                     {/* DROPDOWNS */}
@@ -166,31 +171,28 @@ export default function Navbar() {
 
               <Link
                 href="/"
-                className={`text-xs font-semibold ${
-                  pathname === "/" ? "text-[#7ac943]" : "text-gray-800"
-                }`}
+                className={`text-xs font-semibold ${pathname === "/" ? "text-[#7ac943]" : "text-gray-800"
+                  }`}
               >
                 Home
               </Link>
 
               <Link
                 href="/solutions"
-                className={`text-xs font-semibold ${
-                  pathname.startsWith("/solutions")
+                className={`text-xs font-semibold ${pathname.startsWith("/solutions")
                     ? "text-[#7ac943]"
                     : "text-gray-800"
-                }`}
+                  }`}
               >
                 Solutions
               </Link>
 
               <Link
                 href="/products"
-                className={`text-xs font-semibold ${
-                  pathname.startsWith("/products")
+                className={`text-xs font-semibold ${pathname.startsWith("/products")
                     ? "text-[#7ac943]"
                     : "text-gray-800"
-                }`}
+                  }`}
               >
                 Products
               </Link>
@@ -212,9 +214,8 @@ export default function Navbar() {
 
       {/* MOBILE MENU */}
       <div
-        className={`fixed inset-0 bg-white z-[100] transition-transform duration-300 lg:hidden ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-0 bg-white z-[100] transition-transform duration-300 lg:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* HEADER */}
         <div className="flex items-center justify-between px-6 py-4 border-b">
@@ -246,9 +247,8 @@ export default function Navbar() {
                 key={item.label}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className={`py-5 border-b font-semibold ${
-                  isActive ? "text-[#7ac943]" : "text-gray-800"
-                }`}
+                className={`py-5 border-b font-semibold ${isActive ? "text-[#7ac943]" : "text-gray-800"
+                  }`}
               >
                 {item.label}
               </Link>
