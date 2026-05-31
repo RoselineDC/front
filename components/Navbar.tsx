@@ -66,7 +66,7 @@ export default function Navbar() {
               <Image
                 src="/logo.svg"
                 alt="N.O.B.S Technologies"
-                width={170}
+                width={150}
                 height={55}
                 priority
               />
@@ -87,11 +87,10 @@ export default function Navbar() {
                   >
                     <Link
                       href={item.href}
-                      className={`flex items-center gap-1 text-sm font-semibold transition-colors duration-300 ${
-                        isActive
+                      className={`flex items-center gap-1 text-sm font-semibold transition-colors duration-300 ${isActive
                           ? "text-[#7ac943]"
                           : "text-gray-800 hover:text-[#7ac943]"
-                      }`}
+                        }`}
                     >
                       {item.label}
 
@@ -101,11 +100,10 @@ export default function Navbar() {
                     </Link>
 
                     <span
-                      className={`absolute left-0 -bottom-2 h-[2px] bg-[#7ac943] transition-all duration-300 ${
-                        isActive
+                      className={`absolute left-0 -bottom-2 h-[2px] bg-[#7ac943] transition-all duration-300 ${isActive
                           ? "w-full"
                           : "w-0 group-hover:w-full"
-                      }`}
+                        }`}
                     />
 
                     {/* Dropdown */}
@@ -190,9 +188,8 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed inset-0 bg-white z-[100] transition-transform duration-300 lg:hidden ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-0 bg-white z-[100] transition-transform duration-300 lg:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Mobile Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
@@ -200,9 +197,10 @@ export default function Navbar() {
             <Image
               src="/logo.svg"
               alt="N.O.B.S Technologies"
-              width={140}
+              width={10}
               height={45}
               priority
+              className="w"
             />
           </Link>
 
@@ -224,11 +222,10 @@ export default function Navbar() {
                 key={item.label}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className={`py-5 border-b text-base font-semibold transition-colors ${
-                  isActive
+                className={`py-5 border-b text-base font-semibold transition-colors ${isActive
                     ? "text-[#7ac943]"
                     : "text-gray-800"
-                }`}
+                  }`}
               >
                 {item.label}
               </Link>
