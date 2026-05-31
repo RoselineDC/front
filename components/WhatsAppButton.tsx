@@ -2,7 +2,7 @@
 
 import { FaWhatsapp } from "react-icons/fa";
 
-const PHONE_NUMBER = "27679001246";
+const PHONE_NUMBER = "0791475592";
 
 const MESSAGE = encodeURIComponent(
   "Hello, I need assistance with your services. Please assist."
