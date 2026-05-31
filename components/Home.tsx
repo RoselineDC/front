@@ -43,12 +43,17 @@ export function Hero() {
           <div className="flex flex-col justify-center py-20">
 
             <h1 className="text-white font-black leading-none tracking-tight">
-              <span className="block text-3xl md:text-4xl lg:text-6xl">
+              <span className="text-3xl md:text-4xl lg:text-5xl">
                 Network Operations &
+                <span className="block text-[#7AC943] text-4xl md:text-6xl lg:text-6xl mt-2">
+                Broadband 
               </span>
-              <span className="block text-[#7AC943] text-5xl md:text-6xl lg:text-7xl mt-2">
-                Broadband Solutions Technologies.
+              Solutions 
               </span>
+              <span className="block text-[#7AC943] text-4xl md:text-6xl lg:text-6xl mt-2">
+                Technologies.
+              </span>
+              
             </h1>
 
             <p className="mt-8 text-lg text-white/80 max-w-xl">
