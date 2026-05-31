@@ -94,7 +94,7 @@ export function Hero() {
           </div>
 
           {/* RIGHT */}
-          <div className="hidden lg:flex items-center justify-end py-10">
+          <div className="lg:flex items-center justify-end py-10">
             <div className="relative w-full max-w-3xl h-[600px] rounded-lg overflow-hidden">
               <Image
                 src="/images/hero/hero5.png"
