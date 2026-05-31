@@ -34,15 +34,7 @@ export default function Navbar() {
         <div className="container-custom flex items-center justify-between py-2 text-sm text-gray-600">
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <a
-                href="https://wa.me/27791475592"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-[#7ac943] transition-colors"
-              >
-                <Phone size={14} className="text-[#7ac943]" />
-                <span>079 147 5592</span>
-              </a>
+              c
             </div>
 
             <div className="flex items-center gap-2">

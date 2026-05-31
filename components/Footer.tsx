@@ -131,27 +131,39 @@ export default function Footer() {
                   transition: "color .15s",
                   fontFamily: "'DM Sans', sans-serif",
                 }}
-                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.6)")}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.6)")}
                 >
                   <Mail size={12} color="#B8E0BA" />
-                  info@nobstech.co.za
+                  info@nobstechnologies.co.za
                 </a>
-                <a href="tel:+27011XXXXXX" style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: ".5rem",
-                  fontSize: ".75rem",
-                  color: "rgba(255,255,255,.6)",
-                  textDecoration: "none",
-                  transition: "color .15s",
-                  fontFamily: "'DM Sans', sans-serif",
-                }}
-                onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.6)")}
+                <a
+
+
+                >
+
+                </a>
+                <a href="https://wa.me/27791475592"
+
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 hover:text-[#7ac943] transition-colors"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: ".5rem",
+                    fontSize: ".75rem",
+                    color: "rgba(255,255,255,.6)",
+                    textDecoration: "none",
+                    transition: "color .15s",
+                    fontFamily: "'DM Sans', sans-serif",
+
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
+                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.6)")}
                 >
                   <Phone size={12} color="#B8E0BA" />
-                  +27 (0) 11 XXX XXXX
+                  +27 (0) 791 475 592
                 </a>
               </div>
             </div>
