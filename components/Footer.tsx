@@ -25,8 +25,8 @@ export default function Footer() {
 
         :root {
           --bg:      #F7F7F5;
-          --ink:     #0D0D0D;
-          --sage:    #B8E0BA;
+          --ink:     #0c0e0c;
+          --sage:    #83d650;
           --panel:   #111111;
           --muted:   #6B6B6B;
           --border:  #E2E2E0;
@@ -242,7 +242,7 @@ export default function Footer() {
               }}>
                 Ready to transform your network infrastructure?
               </p>
-              <a href="/contact" className="footer-cta">
+              <a href="/contact" className="footer-cta bg-lime-500">
                 Request a Quote <ArrowRight size={13} />
               </a>
             </div>
