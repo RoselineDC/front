@@ -60,7 +60,6 @@ const socials = [
 export default function ContactPage() {
   return (
     <main className="bg-[#f5f6f7] min-h-screen">
-      <Navbar />
 
       {/* ── Hero Banner ── */}
       <section className="relative bg-black overflow-hidden">
