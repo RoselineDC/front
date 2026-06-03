@@ -1,16 +1,18 @@
-import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import { About, Hero, Solutions } from "@/components/Home";
+import { About, Blog, Hero, Projects, Solutions, Contact } from "@/components/Home";
 
 
 export default function Home() {
   return <div>
-      <Navbar />
+      
 
     <Hero />
     <About />
     <Solutions />
+    <Projects />
+    <Blog />
+    <Contact />
     
-    <Footer />
+   
   </div>;
 }

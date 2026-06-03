@@ -1,281 +1,232 @@
 "use client";
 
-import { Mail, Phone, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  ArrowRight,
+} from "lucide-react";
+import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
-const NAV_LINKS = ["Services", "Solutions", "Projects", "About Us", "Contact"];
 
-function navHref(label: string): string {
-  const routes: Record<string, string> = {
-    "Services": "/services",
-    "Solutions": "/solutions",
-    "Projects": "/projects",
-    "About Us": "/about",
-    "Contact": "/contact",
-  };
-  return routes[label] || "/";
-}
+const quickLinks = [
+  { label: "Services", href: "/services" },
+  { label: "Solutions", href: "/solutions" },
+  { label: "Projects", href: "/projects" },
+  { label: "Blog", href: "/blog" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
 
-export default function Footer() {
+const services = [
+  { label: "Fiber Optic", href: "/services" },
+  { label: "VoIP & PBX", href: "/services" },
+  { label: "Structured Cabling", href: "/services" },
+  { label: "Wireless Links", href: "/services" },
+  { label: "CCTV & Surveillance", href: "/services" },
+  { label: "Access Control", href: "/services" },
+  { label: "Networking", href: "/services" },
+  { label: "Managed IT Services", href: "/services" },
+];
+
+const socials = [
+  { icon: FaFacebook, label: "Facebook", href: "https://facebook.com" },
+  { icon: FaInstagram, label: "Instagram", href: "https://instagram.com" },
+  { icon: FaLinkedin, label: "LinkedIn", href: "https://linkedin.com" },
+];
+
+export function Footer() {
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+    <footer className="bg-black text-white">
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        :root {
-          --bg:      #F7F7F5;
-          --ink:     #0c0e0c;
-          --sage:    #83d650;
-          --panel:   #111111;
-          --muted:   #6B6B6B;
-          --border:  #E2E2E0;
-          --font-sans: 'DM Sans', sans-serif;
-          --font-mono: 'DM Mono', monospace;
-        }
 
-        .footer-link {
-          display: block;
-          font-size: .8rem;
-          color: rgba(255,255,255,.6);
-          margin-bottom: .5rem;
-          text-decoration: none;
-          transition: color .15s;
-          font-family: var(--font-sans);
-        }
-        .footer-link:hover {
-          color: #fff;
-        }
+      {/* ── Main Footer Grid ── */}
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
-        .footer-cta {
-          display: inline-flex;
-          align-items: center;
-          gap: .5rem;
-          background: var(--sage);
-          color: var(--ink);
-          font-family: var(--font-sans);
-          font-weight: 700;
-          font-size: .8rem;
-          padding: .65rem 1.3rem;
-          border-radius: .45rem;
-          text-decoration: none;
-          transition: opacity .15s;
-        }
-        .footer-cta:hover {
-          opacity: .85;
-        }
-
-        .contact-item {
-          display: flex;
-          align-items: center;
-          gap: .5rem;
-          font-size: .75rem;
-          color: rgba(255,255,255,.6);
-          margin-bottom: .6rem;
-          font-family: var(--font-sans);
-        }
-        .contact-item svg {
-          color: var(--sage);
-          flex-shrink: 0;
-        }
-      `}</style>
-
-      {/* ── FOOTER ── */}
-      <footer style={{
-        background: "#0D0D0D",
-        color: "#fff",
-        padding: "4rem 1.5rem 2rem",
-      }}>
-        <div style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-        }}>
-          {/* Main footer content */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "2.5rem",
-            marginBottom: "2.5rem",
-          }}>
-            {/* Brand */}
-            <div>
-              <div style={{
-                fontWeight: 900,
-                fontSize: "1.05rem",
-                letterSpacing: ".06em",
-                marginBottom: "1rem",
-                fontFamily: "'DM Sans', sans-serif",
-              }}>
-                N.O.B.S Technologies
+          {/* ── Col 1 — Brand ── */}
+          <div className="flex flex-col gap-5">
+            {/* Logo */}
+            <Link href="/" className="inline-block">
+              <div className="relative h-12 w-40">
+                <Image
+                  src="/logo.svg"
+                  alt="N.O.B.S Technologies"
+                  width={140}
+                  height={50}
+                  priority
+                />
               </div>
-              <div style={{
-                fontSize: ".7rem",
-                color: "rgba(255,255,255,.5)",
-                fontFamily: "'DM Mono', monospace",
-                marginBottom: "1.2rem",
-              }}>
-                Network Operations & Broadband Solutions
-              </div>
-              <div style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: ".6rem",
-              }}>
-                <a href="mailto:info@nobstech.co.za" style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: ".5rem",
-                  fontSize: ".75rem",
-                  color: "rgba(255,255,255,.6)",
-                  textDecoration: "none",
-                  transition: "color .15s",
-                  fontFamily: "'DM Sans', sans-serif",
-                }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.6)")}
-                >
-                  <Mail size={12} color="#B8E0BA" />
+            </Link>
+
+            <p className="text-xs text-white/50 leading-relaxed">
+              N.O.B.S Technologies — Network Operations &amp; Broadband Solutions.
+              Professional technology solutions designed to connect, protect and
+              power your world.
+            </p>
+
+            {/* Contact info */}
+            <div className="flex flex-col gap-3">
+              <Link
+                href="mailto:info@nobstechnologies.co.za"
+                className="flex items-center gap-3 group"
+              >
+                <span className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#7ac943] transition-colors flex-shrink-0">
+                  <Mail className="w-3.5 h-3.5 text-[#7ac943]" strokeWidth={1.5} />
+                </span>
+                <span className="text-xs text-white/60 group-hover:text-white transition-colors">
                   info@nobstechnologies.co.za
-                </a>
-                <a
+                </span>
+              </Link>
 
-
-                >
-
-                </a>
-                <a href="https://wa.me/27791475592"
-
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 hover:text-[#7ac943] transition-colors"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: ".5rem",
-                    fontSize: ".75rem",
-                    color: "rgba(255,255,255,.6)",
-                    textDecoration: "none",
-                    transition: "color .15s",
-                    fontFamily: "'DM Sans', sans-serif",
-
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,1)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,.6)")}
-                >
-                  <Phone size={12} color="#B8E0BA" />
+              <Link
+                href="https://wa.me/27791475592"
+                target="_blank"
+                className="flex items-center gap-3 group"
+              >
+                <span className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#7ac943] transition-colors flex-shrink-0">
+                  <Phone className="w-3.5 h-3.5 text-[#7ac943]" strokeWidth={1.5} />
+                </span>
+                <span className="text-xs text-white/60 group-hover:text-white transition-colors">
                   +27 (0) 791 475 592
-                </a>
+                </span>
+              </Link>
+
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-3.5 h-3.5 text-[#7ac943]" strokeWidth={1.5} />
+                </span>
+                <span className="text-xs text-white/60">
+                  Johannesburg, South Africa
+                </span>
               </div>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <div style={{
-                fontWeight: 700,
-                fontSize: ".8rem",
-                letterSpacing: ".06em",
-                textTransform: "uppercase",
-                marginBottom: "1rem",
-                fontFamily: "'DM Mono', monospace",
-              }}>
-                Quick Links
-              </div>
-              {NAV_LINKS.map(l => (
-                <a
-                  key={l}
-                  href={navHref(l)}
-                  className="footer-link"
+            {/* Socials */}
+            <div className="flex items-center gap-2 mt-1">
+              {socials.map(({ icon: Icon, label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  aria-label={label}
+                  className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:border-[#7ac943] hover:text-[#7ac943] transition-colors duration-200"
                 >
-                  {l}
-                </a>
+                  <Icon className="w-4 h-4" strokeWidth={1.5} />
+                </Link>
               ))}
-            </div>
-
-            {/* Services */}
-            <div>
-              <div style={{
-                fontWeight: 700,
-                fontSize: ".8rem",
-                letterSpacing: ".06em",
-                textTransform: "uppercase",
-                marginBottom: "1rem",
-                fontFamily: "'DM Mono', monospace",
-              }}>
-                Services
-              </div>
-              {[
-                "Fiber Optic",
-                "VoIP & PBX",
-                "Structured Cabling",
-                "Wireless",
-                "CCTV",
-                "Access Control",
-              ].map(service => (
-                <a
-                  key={service}
-                  href="/services"
-                  className="footer-link"
-                >
-                  {service}
-                </a>
-              ))}
-            </div>
-
-            {/* CTA */}
-            <div>
-              <div style={{
-                fontWeight: 700,
-                fontSize: ".8rem",
-                letterSpacing: ".06em",
-                textTransform: "uppercase",
-                marginBottom: "1rem",
-                fontFamily: "'DM Mono', monospace",
-              }}>
-                Get Started
-              </div>
-              <p style={{
-                fontSize: ".8rem",
-                color: "rgba(255,255,255,.6)",
-                lineHeight: 1.6,
-                marginBottom: "1.25rem",
-                fontFamily: "'DM Sans', sans-serif",
-              }}>
-                Ready to transform your network infrastructure?
-              </p>
-              <a href="/contact" className="footer-cta bg-lime-500">
-                Request a Quote <ArrowRight size={13} />
-              </a>
             </div>
           </div>
 
-          {/* Footer bottom */}
-          <div style={{
-            borderTop: "1px solid rgba(255,255,255,.1)",
-            paddingTop: "1.5rem",
-            marginTop: "2.5rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: ".75rem",
-          }}>
-            <span style={{
-              fontSize: ".7rem",
-              color: "rgba(255,255,255,.35)",
-              fontFamily: "'DM Mono', monospace",
-            }}>
-              © 2026 N.O.B.S Technologies. All rights reserved.
-            </span>
-            <span style={{
-              fontSize: ".7rem",
-              color: "rgba(255,255,255,.25)",
-              fontFamily: "'DM Mono', monospace",
-            }}>
-              Real Networks · Real Solutions
-            </span>
+          {/* ── Col 2 — Quick Links ── */}
+          <div>
+            <h4 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
+              <span className="w-5 h-[2px] bg-[#7ac943] rounded-full inline-block" />
+              Quick Links
+            </h4>
+            <ul className="flex flex-col gap-3">
+              {quickLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <Link
+                    href={href}
+                    className="text-xs text-white/50 hover:text-[#7ac943] transition-colors duration-200 flex items-center gap-2 group"
+                  >
+                    <ArrowRight
+                      size={12}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity text-[#7ac943]"
+                    />
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ── Col 3 — Services ── */}
+          <div>
+            <h4 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
+              <span className="w-5 h-[2px] bg-[#7ac943] rounded-full inline-block" />
+              Services
+            </h4>
+            <ul className="flex flex-col gap-3">
+              {services.map(({ label, href }) => (
+                <li key={label}>
+                  <Link
+                    href={href}
+                    className="text-xs text-white/50 hover:text-[#7ac943] transition-colors duration-200 flex items-center gap-2 group"
+                  >
+                    <ArrowRight
+                      size={12}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity text-[#7ac943]"
+                    />
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ── Col 4 — Working Hours ── */}
+          <div>
+            <h4 className="text-xs font-extrabold text-white uppercase tracking-widest mb-5 flex items-center gap-2">
+              <span className="w-5 h-[2px] bg-[#7ac943] rounded-full inline-block" />
+              Working Hours
+            </h4>
+            <div className="flex flex-col gap-3">
+              {[
+                { day: "Monday – Friday", time: "08:00 – 17:00", open: true },
+                { day: "Saturday", time: "09:00 – 13:00", open: true },
+                { day: "Sunday", time: "Closed", open: false },
+                { day: "Public Holidays", time: "Closed", open: false },
+              ].map(({ day, time, open }) => (
+                <div
+                  key={day}
+                  className="flex items-center justify-between border-b border-white/5 pb-3 last:border-0"
+                >
+                  <span className="text-xs text-white/50">{day}</span>
+                  <span
+                    className={`text-[10px] font-bold uppercase tracking-wide ${open ? "text-[#7ac943]" : "text-red-400/80"
+                      }`}
+                  >
+                    {time}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Emergency support note */}
+            <div className="mt-5 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+              <p className="text-[10px] text-white/40 leading-relaxed">
+                <span className="text-[#7ac943] font-bold">24/7 Technical Support</span>{" "}
+                available for managed service clients. Contact us for details.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── Bottom Bar ── */}
+      <div className="border-t border-white/10">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-[11px] text-white/30">
+            © {new Date().getFullYear()} N.O.B.S Technologies. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy-policy" className="text-[11px] text-white/30 hover:text-[#7ac943] transition-colors">
+              Privacy Policy
+            </Link>
+            <span className="text-white/10">|</span>
+            <Link href="/terms" className="text-[11px] text-white/30 hover:text-[#7ac943] transition-colors">
+              Terms of Service
+            </Link>
           </div>
         </div>
-      </footer>
-    </>
+      </div>
+
+    </footer>
   );
 }

@@ -1,534 +1,297 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  MessageCircle,
+  
+} from "lucide-react";
+import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
 
-/**
- * DESIGN TOKENS (matching your home page):
- * Primary:   #0D0D0D  (near-black)
- * Accent:    #B8E0BA  (sage green)
- * Surface:   #F7F7F5  (warm off-white)
- * Fonts:     DM Sans (body), DM Mono (accents)
- */
 
-const CONTACT_INFO = [
+const contactDetails = [
   {
     icon: Mail,
-    label: "Email",
-    value: "info@nobstech.co.za",
-    href: "mailto:info@nobstech.co.za",
+    label: "Email Us",
+    value: "info@nobstechnologies.co.za",
+    href: "mailto:info@nobstechnologies.co.za",
+    description: "We aim to respond within 24 hours on business days.",
   },
   {
     icon: Phone,
-    label: "Phone",
-    value: "+27 (0) 11 XXX XXXX",
-    href: "tel:+27011XXXXXX",
+    label: "Call Us",
+    value: "+27 (0) 791 475 592",
+    href: "tel:+27791475592",
+    description: "Available Monday to Friday, 08:00 – 17:00.",
+  },
+  {
+    icon: MessageCircle,
+    label: "WhatsApp",
+    value: "+27 (0) 791 475 592",
+    href: "https://wa.me/27791475592",
+    description: "Prefer to chat? Send us a WhatsApp message anytime.",
   },
   {
     icon: MapPin,
-    label: "Address",
-    value: "Johannesburg, South Africa",
-    href: "#",
-  },
-  {
-    icon: Clock,
-    label: "Business Hours",
-    value: "Mon–Fri, 08:00–17:00 SAST",
-    href: "#",
+    label: "Location",
+    value: "Johannesburg, Gauteng",
+    href: null,
+    description: "Serving clients across South Africa and the region.",
   },
 ];
 
-export default function Contact() {
-  const [mounted, setMounted] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    service: "",
-    message: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+const hours = [
+  { day: "Monday – Friday", time: "08:00 – 17:00" },
+  { day: "Saturday", time: "09:00 – 13:00" },
+  { day: "Sunday & Public Holidays", time: "Closed" },
+];
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+const socials = [
+  { icon: FaFacebook, label: "Facebook", href: "https://facebook.com" },
+  { icon: FaInstagram, label: "Instagram", href: "https://instagram.com" },
+  { icon: FaLinkedin, label: "LinkedIn", href: "https://linkedin.com" },
+];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setSubmitted(true);
-      setLoading(false);
-      setFormData({ name: "", email: "", company: "", service: "", message: "" });
-      
-      // Reset after 5 seconds
-      setTimeout(() => setSubmitted(false), 5000);
-    }, 1500);
-  };
-
+export default function ContactPage() {
   return (
-    <>
-      <style>{`
-        @keyframes fadeUp {
-          from { opacity:0; transform: translateY(24px); }
-          to   { opacity:1; transform: translateY(0);    }
-        }
-        @keyframes slideIn {
-          from { opacity:0; transform: translateX(-12px); }
-          to   { opacity:1; transform: translateX(0);    }
-        }
-        @keyframes checkmark {
-          0% { transform: scale(0.5); opacity: 0; }
-          50% { transform: scale(1.1); }
-          100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
+    <main className="bg-[#f5f6f7] min-h-screen">
+      <Navbar />
 
-        .fade-up { opacity:0; }
-        .fade-up.ready { animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) forwards; }
-        .delay-1 { animation-delay: .1s; }
-        .delay-2 { animation-delay: .22s; }
-        .delay-3 { animation-delay: .34s; }
-        .delay-4 { animation-delay: .46s; }
-        .delay-5 { animation-delay: .58s; }
+      {/* ── Hero Banner ── */}
+      <section className="relative bg-black overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10" />
+        <div className="absolute inset-0 bg-[url('/images/contact/contact-banner.jpg')] bg-cover bg-center opacity-30" />
+        <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full bg-[#7ac943]/10 blur-3xl pointer-events-none z-10" />
 
-        .contact-card {
-          border: 1px solid #E2E2E0;
-          border-radius: .75rem;
-          padding: 2rem;
-          background: #fff;
-          transition: all .2s;
-        }
-        .contact-card:hover {
-          border-color: #B8E0BA;
-          box-shadow: 0 8px 28px rgba(0,0,0,.07);
-          transform: translateY(-3px);
-        }
-
-        .form-group {
-          display: flex; flex-direction: column; gap: .5rem;
-        }
-        .form-label {
-          font-size: .875rem; font-weight: 600; color: #0D0D0D;
-          letter-spacing: .01em; font-family: 'DM Sans', sans-serif;
-        }
-        .form-input,
-        .form-textarea,
-        .form-select {
-          font-family: 'DM Sans', sans-serif;
-          font-size: .875rem;
-          padding: .75rem 1rem;
-          border: 1px solid #E2E2E0;
-          border-radius: .5rem;
-          background: #fff;
-          color: #0D0D0D;
-          transition: border-color .2s, box-shadow .2s;
-        }
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-          outline: none;
-          border-color: #B8E0BA;
-          box-shadow: 0 0 0 3px rgba(184,224,186,.1);
-        }
-        .form-textarea {
-          resize: vertical;
-          min-height: 120px;
-        }
-
-        .submit-btn {
-          display: inline-flex; align-items: center; gap: .5rem;
-          background: #0D0D0D; color: #fff;
-          font-family: 'DM Sans', sans-serif; font-size: .875rem; font-weight: 600;
-          padding: .8rem 1.6rem; border-radius: .5rem; border: none;
-          cursor: pointer; letter-spacing: .01em;
-          transition: background .2s, transform .15s;
-          width: 100%;
-          justify-content: center;
-        }
-        .submit-btn:hover:not(:disabled) {
-          background: #2a2a2a;
-          transform: translateY(-1px);
-        }
-        .submit-btn:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-
-        .success-message {
-          display: flex; align-items: center; gap: .75rem;
-          background: rgba(184,224,186,.15);
-          border: 1px solid #B8E0BA;
-          color: #0D0D0D;
-          padding: 1rem 1.25rem;
-          border-radius: .5rem;
-          font-size: .875rem;
-          animation: slideIn 0.4s cubic-bezier(.22,1,.36,1);
-          font-family: 'DM Sans', sans-serif;
-        }
-        .success-icon {
-          animation: checkmark 0.6s cubic-bezier(.22,1,.36,1);
-        }
-      `}</style>
-            <Navbar />
-
-
-      {/* HEADER */}
-      <section style={{
-        background: "#F7F7F5",
-        padding: "5rem 1.5rem 3rem",
-        borderBottom: "1px solid #E2E2E0",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-          display: "flex", flexDirection: "column", gap: "2rem",
-        }}>
-          {/* Eyebrow */}
-          <div className={`fade-up delay-1${mounted ? " ready" : ""}`}
-               style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", width: "fit-content" }}>
-            <span style={{
-              display: "inline-block", width: 8, height: 8, borderRadius: "50%",
-              background: "#B8E0BA",
-            }} />
-            <span style={{ fontSize: ".75rem", fontFamily: "'DM Mono', monospace", color: "#6B6B6B", letterSpacing: ".1em", textTransform: "uppercase" }}>
-              Get in Touch
-            </span>
+        <div className="relative z-20 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-white/50 uppercase tracking-widest font-semibold mb-6">
+            <Link href="/" className="hover:text-[#7ac943] transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-[#7ac943]">Contact</span>
           </div>
 
-          {/* Headline */}
-          <h1 className={`fade-up delay-2${mounted ? " ready" : ""}`} style={{
-            fontSize: "clamp(2.2rem, 5vw, 4rem)",
-            fontWeight: 900,
-            lineHeight: 1.1,
-            letterSpacing: "-.02em",
-            color: "#0D0D0D",
-            fontFamily: "'DM Sans', sans-serif",
-          }}>
-            Contact Us
+          <h1 className="text-white font-black leading-none tracking-tight">
+            <span className="text-3xl sm:text-4xl lg:text-5xl">Let&apos;s</span>
+            <span className="block text-[#7ac943] text-4xl sm:text-5xl lg:text-6xl mt-1">
+              Work Together
+            </span>
           </h1>
 
-          {/* Description */}
-          <p className={`fade-up delay-3${mounted ? " ready" : ""}`} style={{
-            fontSize: ".975rem", lineHeight: 1.7, color: "#6B6B6B", maxWidth: 600,
-            fontFamily: "'DM Sans', sans-serif",
-          }}>
-            Have a question or ready to discuss your network infrastructure needs? We're here to help. Reach out to our team and let's start a conversation.
+          <p className="mt-5 text-sm md:text-base text-white/70 max-w-xl">
+            Whether you need a quote, technical advice or want to discuss a project — our team is ready to help.
           </p>
         </div>
       </section>
 
-      {/* MAIN CONTENT */}
-      <section style={{
-        background: "#F7F7F5",
-        padding: "4rem 1.5rem",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "4rem",
-          alignItems: "start",
-        }}
-        className="contact-grid"
-        >
-          <style>{`@media(max-width:900px){.contact-grid{grid-template-columns:1fr!important}}`}</style>
+      {/* ── Contact Cards Row ── */}
+      <section className="py-16 lg:py-20">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
 
-          {/* Left: Contact Info */}
-          <div className={`fade-up delay-4${mounted ? " ready" : ""}`}>
-            <h2 style={{
-              fontSize: "1.5rem", fontWeight: 700, marginBottom: "2rem",
-              color: "#0D0D0D", fontFamily: "'DM Sans', sans-serif",
-            }}>
-              Contact Information
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 uppercase tracking-tight mb-3">
+              Contact <span className="text-[#7ac943]">Information</span>
             </h2>
-
-            <div style={{
-              display: "flex", flexDirection: "column", gap: "1.5rem",
-            }}>
-              {CONTACT_INFO.map((info, idx) => {
-                const Icon = info.icon;
-                return (
-                  <a
-                    key={idx}
-                    href={info.href}
-                    style={{
-                      display: "flex", gap: "1rem",
-                      textDecoration: "none",
-                      transition: "transform .2s",
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.transform = "translateX(4px)")}
-                    onMouseLeave={e => (e.currentTarget.style.transform = "translateX(0)")}
-                  >
-                    <div style={{
-                      width: 48, height: 48,
-                      borderRadius: ".5rem",
-                      background: "rgba(184,224,186,.1)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      flexShrink: 0,
-                    }}>
-                      <Icon size={20} color="#B8E0BA" />
-                    </div>
-                    <div>
-                      <div style={{
-                        fontSize: ".875rem", fontWeight: 600, color: "#6B6B6B",
-                        letterSpacing: ".05em", textTransform: "uppercase",
-                        fontFamily: "'DM Mono', monospace",
-                      }}>
-                        {info.label}
-                      </div>
-                      <div style={{
-                        fontSize: "1rem", fontWeight: 500, color: "#0D0D0D",
-                        marginTop: ".25rem", fontFamily: "'DM Sans', sans-serif",
-                      }}>
-                        {info.value}
-                      </div>
-                    </div>
-                  </a>
-                );
-              })}
+            <div className="flex justify-center mb-4">
+              <span className="h-[3px] w-14 bg-[#7ac943] rounded-full" />
             </div>
-
-            {/* Additional info box */}
-            <div style={{
-              marginTop: "3rem",
-              padding: "2rem",
-              background: "#fff",
-              border: "1px solid #E2E2E0",
-              borderRadius: ".75rem",
-            }}>
-              <h3 style={{
-                fontSize: ".875rem", fontWeight: 700, color: "#6B6B6B",
-                letterSpacing: ".05em", textTransform: "uppercase",
-                marginBottom: "1rem", fontFamily: "'DM Mono', monospace",
-              }}>
-                Response Time
-              </h3>
-              <p style={{
-                fontSize: ".9rem", lineHeight: 1.6, color: "#0D0D0D",
-                fontFamily: "'DM Sans', sans-serif",
-              }}>
-                We typically respond to inquiries within <strong>24 business hours</strong>. For urgent matters, please call our office directly.
-              </p>
-            </div>
+            <p className="text-gray-500 text-sm">Multiple ways to reach the N.O.B.S Technologies team.</p>
           </div>
 
-          {/* Right: Contact Form */}
-          <div className={`fade-up delay-5${mounted ? " ready" : ""}`}>
-            <h2 style={{
-              fontSize: "1.5rem", fontWeight: 700, marginBottom: "2rem",
-              color: "#0D0D0D", fontFamily: "'DM Sans', sans-serif",
-            }}>
-              Send us a Message
-            </h2>
-
-            {submitted && (
-              <div className="success-message" style={{ marginBottom: "1.5rem" }}>
-                <CheckCircle size={20} className="success-icon" />
-                <span>Thank you! We'll be in touch shortly.</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} style={{
-              display: "flex", flexDirection: "column", gap: "1.5rem",
-            }}>
-              {/* Name */}
-              <div className="form-group">
-                <label className="form-label">Full Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              {/* Email */}
-              <div className="form-group">
-                <label className="form-label">Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="john@company.com"
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              {/* Company */}
-              <div className="form-group">
-                <label className="form-label">Company</label>
-                <input
-                  type="text"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  placeholder="Your Company"
-                  className="form-input"
-                />
-              </div>
-
-              {/* Service Interest */}
-              <div className="form-group">
-                <label className="form-label">Service of Interest</label>
-                <select
-                  name="service"
-                  value={formData.service}
-                  onChange={handleChange}
-                  required
-                  className="form-select"
-                >
-                  <option value="">Select a service...</option>
-                  <option value="fiber">Fiber Optic Infrastructure</option>
-                  <option value="voip">VoIP & PBX Systems</option>
-                  <option value="cabling">Structured Cabling</option>
-                  <option value="wireless">Wireless Networks</option>
-                  <option value="cctv">CCTV & Security</option>
-                  <option value="access">Access Control</option>
-                  <option value="microwave">Microwave Radio</option>
-                  <option value="it">IT Solutions</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              {/* Message */}
-              <div className="form-group">
-                <label className="form-label">Message</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="Tell us about your project or inquiry..."
-                  required
-                  className="form-textarea"
-                />
-              </div>
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={loading || submitted}
-                className="submit-btn"
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
+            {contactDetails.map(({ icon: Icon, label, value, href, description }) => (
+              <div
+                key={label}
+                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col items-start gap-4 group hover:border-[#7ac943]/40 transition-colors duration-300"
               >
-                {loading ? (
-                  <>
-                    <span style={{
-                      display: "inline-block",
-                      width: "16px", height: "16px",
-                      border: "2px solid rgba(255,255,255,.3)",
-                      borderTop: "2px solid #fff",
-                      borderRadius: "50%",
-                      animation: "spin 0.8s linear infinite",
-                    }} />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    Send Message <Send size={16} />
-                  </>
-                )}
-              </button>
-            </form>
-
-            {/* Privacy note */}
-            <p style={{
-              fontSize: ".75rem", color: "#6B6B6B", marginTop: "1.5rem",
-              lineHeight: 1.6, fontFamily: "'DM Sans', sans-serif",
-            }}>
-              We respect your privacy. Your information will only be used to respond to your inquiry and will never be shared with third parties.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ SECTION */}
-      <section style={{
-        background: "#fff",
-        padding: "4rem 1.5rem",
-        borderTop: "1px solid #E2E2E0",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-        }}>
-          <h2 style={{
-            fontSize: "1.8rem", fontWeight: 700, marginBottom: "3rem",
-            color: "#0D0D0D", textAlign: "center", fontFamily: "'DM Sans', sans-serif",
-          }}>
-            Frequently Asked Questions
-          </h2>
-
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "2rem",
-          }}>
-            {[
-              {
-                q: "What is your typical project timeline?",
-                a: "Project timelines vary based on scope and complexity. We provide detailed estimates during the consultation phase.",
-              },
-              {
-                q: "Do you offer maintenance and support?",
-                a: "Yes, we provide comprehensive maintenance packages and 24/7 technical support for all deployed solutions.",
-              },
-              {
-                q: "Can you work with existing infrastructure?",
-                a: "Absolutely. We specialize in integrating with and upgrading existing network infrastructure.",
-              },
-              {
-                q: "What certifications do your technicians have?",
-                a: "Our team holds industry-standard certifications including CompTIA, Cisco, and manufacturer-specific qualifications.",
-              },
-              {
-                q: "Do you provide training?",
-                a: "Yes, we include comprehensive training for your team as part of our project delivery.",
-              },
-              {
-                q: "What is your warranty policy?",
-                a: "We provide standard manufacturer warranties plus extended support options tailored to your needs.",
-              },
-            ].map((faq, idx) => (
-              <div key={idx} className={`fade-up delay-${(idx % 3) + 1}${mounted ? " ready" : ""}`}
-                   style={{ animationDelay: `${0.1 + idx * 0.1}s` }}>
-                <div style={{
-                  padding: "1.5rem",
-                  background: "#F7F7F5",
-                  border: "1px solid #E2E2E0",
-                  borderRadius: ".75rem",
-                }}>
-                  <h3 style={{
-                    fontSize: ".95rem", fontWeight: 700, color: "#0D0D0D",
-                    marginBottom: ".75rem", fontFamily: "'DM Sans', sans-serif",
-                  }}>
-                    {faq.q}
-                  </h3>
-                  <p style={{
-                    fontSize: ".875rem", lineHeight: 1.6, color: "#6B6B6B",
-                    fontFamily: "'DM Sans', sans-serif",
-                  }}>
-                    {faq.a}
+                <span className="w-12 h-12 rounded-full border-2 border-[#7ac943] flex items-center justify-center bg-white flex-shrink-0">
+                  <Icon className="w-5 h-5 text-[#7ac943]" strokeWidth={1.5} />
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                    {label}
                   </p>
+                  {href ? (
+                    <Link
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      className="text-sm font-extrabold text-gray-900 hover:text-[#7ac943] transition-colors duration-200 block mb-2"
+                    >
+                      {value}
+                    </Link>
+                  ) : (
+                    <p className="text-sm font-extrabold text-gray-900 mb-2">{value}</p>
+                  )}
+                  <p className="text-xs text-gray-400 leading-relaxed">{description}</p>
                 </div>
               </div>
             ))}
           </div>
+
+          {/* ── Main Two Column ── */}
+          <div className="grid lg:grid-cols-2 gap-6">
+
+            {/* ── LEFT — Full Form ── */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col gap-5">
+              <div>
+                <h3 className="text-xl font-extrabold text-gray-900 uppercase tracking-wide mb-1">
+                  Send Us A <span className="text-[#7ac943]">Message</span>
+                </h3>
+                <p className="text-xs text-gray-400">Fill in the form and we will get back to you shortly.</p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    Full Name <span className="text-[#7ac943]">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="John Doe"
+                    className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    Company Name
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Your Company"
+                    className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    Email Address <span className="text-[#7ac943]">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="you@company.co.za"
+                    className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                    Phone Number <span className="text-[#7ac943]">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    placeholder="+27 000 000 000"
+                    className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  Service of Interest
+                </label>
+                <select className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-[#7ac943] transition-colors bg-white appearance-none">
+                  <option value="">Select a service...</option>
+                  <option>CCTV & Surveillance</option>
+                  <option>Access Control</option>
+                  <option>Networking</option>
+                  <option>Wireless Links</option>
+                  <option>Data Centre & Power</option>
+                  <option>VoIP & Communications</option>
+                  <option>Structured Cabling</option>
+                  <option>Managed IT Services</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                  Message <span className="text-[#7ac943]">*</span>
+                </label>
+                <textarea
+                  rows={5}
+                  placeholder="Tell us about your project, requirement or question..."
+                  className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors resize-none"
+                />
+              </div>
+
+              <button
+                type="button"
+                className="inline-flex items-center justify-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
+              >
+                Send Message <ArrowRight size={16} />
+              </button>
+            </div>
+
+            {/* ── RIGHT — Hours + Map + Socials ── */}
+            <div className="flex flex-col gap-5">
+
+              {/* Business Hours */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="w-11 h-11 rounded-full border-2 border-[#7ac943] flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-5 h-5 text-[#7ac943]" strokeWidth={1.5} />
+                  </span>
+                  <h3 className="text-base font-extrabold text-gray-900 uppercase tracking-wide">
+                    Business <span className="text-[#7ac943]">Hours</span>
+                  </h3>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {hours.map(({ day, time }) => (
+                    <div key={day} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                      <span className="text-xs font-semibold text-gray-600">{day}</span>
+                      <span className={`text-xs font-bold uppercase tracking-wide ${time === "Closed" ? "text-red-400" : "text-[#7ac943]"}`}>
+                        {time}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Google Map Embed */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex-1 min-h-[220px]">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114902.03538954562!2d27.954599!3d-26.204103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c68f0406a51%3A0x238ac9d9b1d34041!2sJohannesburg%2C%20South%20Africa!5e0!3m2!1sen!2s!4v1700000000000"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, minHeight: "220px" }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="N.O.B.S Technologies Location"
+                />
+              </div>
+
+              {/* Social Media */}
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+                <h3 className="text-sm font-extrabold text-gray-900 uppercase tracking-wide mb-4">
+                  Follow <span className="text-[#7ac943]">Us</span>
+                </h3>
+                <div className="flex items-center gap-3">
+                  {socials.map(({ icon: Icon, label, href }) => (
+                    <Link
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      aria-label={label}
+                      className="w-11 h-11 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-400 hover:border-[#7ac943] hover:text-[#7ac943] transition-colors duration-200"
+                    >
+                      <Icon className="w-5 h-5" strokeWidth={1.5} />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </section>
-    </>
+
+    </main>
   );
 }

@@ -5,12 +5,15 @@ import Link from "next/link";
 
 import {
   Video,
+  Shield,
   Wifi,
   Lock,
   PhoneCall,
   Antenna,
   Server,
   ArrowRight,
+  Mail,
+  MapPin,
   Users,
   ShieldCheck,
   Heart,
@@ -476,6 +479,438 @@ export function About() {
           </div>
         </div>
 
+      </div>
+    </section>
+  );
+}
+
+// projects
+const projects = [
+  {
+    title: "Sandton Corporate Campus Surveillance",
+    description:
+      "Full-scale CCTV deployment across a 5-building corporate campus with centralised NVR monitoring and remote access integration.",
+    image: "/images/projects/acess-contorl.webp",
+    icon: Camera,
+    location: "Johannesburg",
+    year: "2024",
+    tag: "CCTV",
+    href: "/projects/sandton-campus-surveillance",
+  },
+  {
+    title: "Warehouse Network Infrastructure Upgrade",
+    description:
+      "End-to-end network redesign for a large logistics warehouse including Cisco switching, MikroTik routing and structured Cat6 cabling.",
+    image: "/images/projects/server.jpeg",
+    icon: Network,
+    location: "Pretoria",
+    year: "2024",
+    tag: "Networking",
+    href: "/projects/warehouse-network-upgrade",
+  },
+  {
+    title: "Residential Estate Access Control System",
+    description:
+      "Biometric and card-based access control installation for a gated residential estate with visitor management and intercom integration.",
+    image: "/images/projects/networks.jpeg",
+    icon: Lock,
+    location: "Midrand",
+    year: "2023",
+    tag: "Access Control",
+    href: "/projects/residential-estate-access",
+  },
+];
+
+export function Projects() {
+  return (
+    <section className="bg-white py-16 lg:py-24">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ── Section Header ── */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 uppercase tracking-tight mb-3">
+            Our <span className="text-[#7ac943]">Projects</span>
+          </h2>
+          {/* Green underline bar */}
+          <div className="flex justify-center mb-4">
+            <span className="h-[3px] w-14 bg-[#7ac943] rounded-full" />
+          </div>
+          <p className="text-gray-500 text-sm">
+            A snapshot of the work we are proud of — built to last.
+          </p>
+        </div>
+
+        {/* ── Cards Grid ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+          {projects.map((project) => {
+            const Icon = project.icon;
+            return (
+              <div
+                key={project.title}
+                className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group"
+              >
+                {/* Image */}
+                <div className="relative h-[200px] w-full overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {/* Tag badge */}
+                  <span className="absolute top-3 left-3 bg-[#7ac943] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                    {project.tag}
+                  </span>
+                  {/* Green bottom-left accent bar */}
+                  <span className="absolute bottom-0 left-0 w-10 h-[3px] bg-[#7ac943]" />
+                </div>
+
+                {/* Content */}
+                <div className="p-5 flex flex-col flex-1">
+                  {/* Icon + Title row */}
+                  <div className="flex items-start gap-3 mb-3">
+                    <span className="flex-shrink-0 w-11 h-11 rounded-full border-2 border-[#7ac943] flex items-center justify-center bg-white">
+                      <Icon className="w-5 h-5 text-[#7ac943]" strokeWidth={1.5} />
+                    </span>
+                    <h3 className="text-sm font-extrabold text-gray-900 uppercase leading-tight pt-1">
+                      {project.title}
+                    </h3>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs text-gray-500 leading-relaxed mb-4 flex-1">
+                    {project.description}
+                  </p>
+
+                  {/* Location & Year meta */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="flex items-center gap-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#7ac943] inline-block" />
+                      {project.location}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#7ac943] inline-block" />
+                      {project.year}
+                    </span>
+                  </div>
+
+                  {/* View Project link */}
+                  <Link
+                    href={project.href}
+                    className="inline-flex items-center gap-1.5 text-[#7ac943] text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-200"
+                  >
+                    View Project <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ── View All Button ── */}
+        <div className="flex justify-center">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-8 py-4 rounded-md"
+          >
+            View All Projects <ArrowRight size={16} />
+          </Link>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+// blog
+
+const posts = [
+  {
+    title: "Why Every Business Needs a Managed Network in 2024",
+    excerpt:
+      "Unmanaged networks are a liability. We break down why proactive monitoring and managed infrastructure is no longer optional for growing businesses.",
+    image: "/images/blog/blog1.jpeg",
+    icon: Wifi,
+    category: "Networking",
+    date: "12 May 2024",
+    readTime: "5 min read",
+    href: "/blog/why-every-business-needs-managed-network",
+  },
+  {
+    title: "CCTV vs IP Cameras: Which is Right for Your Property?",
+    excerpt:
+      "Analog CCTV and IP cameras each have their place. We compare resolution, cost, scalability and remote access so you can make the right call.",
+    image: "/images/blog/cctvblog.webp",
+    icon: Shield,
+    category: "Security",
+    date: "03 Apr 2024",
+    readTime: "4 min read",
+    href: "/blog/cctv-vs-ip-cameras",
+  },
+  {
+    title: "Data Centre Power: UPS, PDU & What You Actually Need",
+    excerpt:
+      "Power failures cost businesses thousands. Here is a practical guide to UPS systems, PDUs and building a resilient power strategy for your data centre.",
+    image: "/images/blog/serverblog.jpeg",
+    icon: Server,
+    category: "Data Centre",
+    date: "18 Mar 2024",
+    readTime: "6 min read",
+    href: "/blog/data-centre-power-ups-pdu-guide",
+  },
+];
+
+export function Blog() {
+  return (
+    <section className="bg-[#f5f6f7] py-16 lg:py-24">
+      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ── Section Header ── */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 uppercase tracking-tight mb-3">
+            Latest <span className="text-[#7ac943]">Insights</span>
+          </h2>
+          <div className="flex justify-center mb-4">
+            <span className="h-[3px] w-14 bg-[#7ac943] rounded-full" />
+          </div>
+          <p className="text-gray-500 text-sm">
+            Tips, guides and news from the N.O.B.S Technologies team.
+          </p>
+        </div>
+
+        {/* ── Cards Grid ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
+          {posts.map((post) => {
+            const Icon = post.icon;
+            return (
+              <div
+                key={post.title}
+                className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group"
+              >
+                {/* Image */}
+                <div className="relative h-[200px] w-full overflow-hidden">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {/* Category badge */}
+                  <span className="absolute top-3 left-3 bg-[#7ac943] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                    {post.category}
+                  </span>
+                  {/* Green bottom-left accent bar */}
+                  <span className="absolute bottom-0 left-0 w-10 h-[3px] bg-[#7ac943]" />
+                </div>
+
+                {/* Content */}
+                <div className="p-5 flex flex-col flex-1">
+                  {/* Icon + Title row */}
+                  <div className="flex items-start gap-3 mb-3">
+                    <span className="flex-shrink-0 w-11 h-11 rounded-full border-2 border-[#7ac943] flex items-center justify-center bg-white">
+                      <Icon className="w-5 h-5 text-[#7ac943]" strokeWidth={1.5} />
+                    </span>
+                    <h3 className="text-sm font-extrabold text-gray-900 uppercase leading-tight pt-1">
+                      {post.title}
+                    </h3>
+                  </div>
+
+                  {/* Excerpt */}
+                  <p className="text-xs text-gray-500 leading-relaxed mb-4 flex-1">
+                    {post.excerpt}
+                  </p>
+
+                  {/* Date & Read time meta */}
+                  <div className="flex items-center gap-4 mb-4">
+                    <span className="flex items-center gap-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#7ac943] inline-block" />
+                      {post.date}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#7ac943] inline-block" />
+                      {post.readTime}
+                    </span>
+                  </div>
+
+                  {/* Read More link */}
+                  <Link
+                    href={post.href}
+                    className="inline-flex items-center gap-1.5 text-[#7ac943] text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-200"
+                  >
+                    Read More <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ── View All Button ── */}
+        <div className="flex justify-center">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-8 py-4 rounded-md"
+          >
+            View All Posts <ArrowRight size={16} />
+          </Link>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+// contact 
+const contactInfo = [
+  {
+    icon: Mail,
+    label: "Email Us",
+    value: "info@nobstechnologies.co.za",
+    href: "mailto:info@nobstechnologies.co.za",
+  },
+  {
+    icon: Phone,
+    label: "Call / WhatsApp",
+    value: "+27 (0) 791 475 592",
+    href: "https://wa.me/27791475592",
+  },
+  {
+    icon: MapPin,
+    label: "Location",
+    value: "Johannesburg, South Africa",
+    href: null,
+  },
+  {
+    icon: Clock,
+    label: "Working Hours",
+    value: "Mon – Fri: 08:00 – 17:00",
+    href: null,
+  },
+];
+
+export function Contact() {
+  return (
+    <section className="bg-black py-16 lg:py-24 relative overflow-hidden">
+      {/* Subtle green glow accent */}
+      <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#7ac943]/10 blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full bg-[#7ac943]/5 blur-3xl pointer-events-none" />
+
+      <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* ── Section Header ── */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-white uppercase tracking-tight mb-3">
+            Get In <span className="text-[#7ac943]">Touch</span>
+          </h2>
+          <div className="flex justify-center mb-4">
+            <span className="h-[3px] w-14 bg-[#7ac943] rounded-full" />
+          </div>
+          <p className="text-white/50 text-sm">
+            Ready to upgrade your infrastructure? Reach out — we respond fast.
+          </p>
+        </div>
+
+        {/* ── Two Column Layout ── */}
+        <div className="grid lg:grid-cols-2 gap-6">
+
+          {/* ── LEFT — Contact Info Cards ── */}
+          <div className="flex flex-col gap-4">
+            {contactInfo.map(({ icon: Icon, label, value, href }) => (
+              <div
+                key={label}
+                className="bg-white/5 border border-white/10 rounded-2xl p-5 flex items-center gap-4 group hover:border-[#7ac943]/50 transition-colors duration-300"
+              >
+                <span className="flex-shrink-0 w-11 h-11 rounded-full border-2 border-[#7ac943] flex items-center justify-center bg-transparent">
+                  <Icon className="w-5 h-5 text-[#7ac943]" strokeWidth={1.5} />
+                </span>
+                <div>
+                  <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-0.5">
+                    {label}
+                  </p>
+                  {href ? (
+                    <Link
+                      href={href}
+                      target={href.startsWith("http") ? "_blank" : undefined}
+                      className="text-sm font-semibold text-white hover:text-[#7ac943] transition-colors duration-200"
+                    >
+                      {value}
+                    </Link>
+                  ) : (
+                    <p className="text-sm font-semibold text-white">{value}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+
+            {/* CTA to full contact page */}
+            <Link
+              href="/contact"
+              className="mt-2 inline-flex items-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md self-start"
+            >
+              Full Contact Page <ArrowRight size={16} />
+            </Link>
+          </div>
+
+          {/* ── RIGHT — Quick Enquiry Form ── */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-5">
+            <h3 className="text-lg font-extrabold text-white uppercase tracking-wide">
+              Quick <span className="text-[#7ac943]">Enquiry</span>
+            </h3>
+
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="John Doe"
+                  className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  placeholder="+27 000 000 000"
+                  className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                Email Address
+              </label>
+              <input
+                type="email"
+                placeholder="you@company.co.za"
+                className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
+                Message
+              </label>
+              <textarea
+                rows={4}
+                placeholder="Tell us about your project or requirement..."
+                className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors resize-none"
+              />
+            </div>
+
+            <button
+              type="button"
+              className="inline-flex items-center justify-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
+            >
+              Send Enquiry <ArrowRight size={16} />
+            </button>
+          </div>
+
+        </div>
       </div>
     </section>
   );

@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 import {
   Antenna, PhoneCall, Plug, Wifi, Video, Lock,
-  Radio, Server, ArrowRight, CheckCircle2,
-  Mail, Phone, Menu, X, ChevronDown,
+  Radio, Server, ArrowRight, CheckCircle2, ChevronDown,
+  Camera, Network, Cable, Monitor,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+/* ── Types ── */
 interface Solution {
   id: string;
   icon: React.ElementType;
@@ -18,10 +19,11 @@ interface Solution {
   description: string;
   highlights: string[];
   specs: { label: string; value: string }[];
-  accent: string;
+  image: string;
+  href: string;
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+/* ── Data ── */
 const SOLUTIONS: Solution[] = [
   {
     id: "fiber",
@@ -43,7 +45,8 @@ const SOLUTIONS: Solution[] = [
       { label: "Testing", value: "OTDR + IL" },
       { label: "Scale", value: "Campus to WAN" },
     ],
-    accent: "#B8E0BA",
+    image: "/images/solutions/fiber.jpg",
+    href: "/solutions/fiber-optic",
   },
   {
     id: "voip",
@@ -65,11 +68,12 @@ const SOLUTIONS: Solution[] = [
       { label: "HA", value: "Failover ready" },
       { label: "Ext.", value: "1 – 500+" },
     ],
-    accent: "#A8D5E2",
+    image: "/images/hero/voip.jpg",
+    href: "/solutions/voip-communications",
   },
   {
     id: "cabling",
-    icon: Plug,
+    icon: Cable,
     category: "Infrastructure",
     title: "Structured Cabling",
     tagline: "Clean, certified copper runs",
@@ -87,7 +91,8 @@ const SOLUTIONS: Solution[] = [
       { label: "Bandwidth", value: "Up to 10 Gbps" },
       { label: "Standards", value: "TIA / ISO" },
     ],
-    accent: "#F0C9A0",
+    image: "/images/hero/structure.jpeg",
+    href: "/solutions/structured-cabling",
   },
   {
     id: "wireless",
@@ -109,16 +114,17 @@ const SOLUTIONS: Solution[] = [
       { label: "Brands", value: "Ubiquiti · Cisco" },
       { label: "Survey", value: "Ekahau / iBwave" },
     ],
-    accent: "#C9B8E8",
+    image: "/images/hero/wireless.jpg",
+    href: "/solutions/wireless-links",
   },
   {
     id: "cctv",
-    icon: Video,
+    icon: Camera,
     category: "Security",
     title: "CCTV Surveillance",
     tagline: "Always watching, always recording",
     description:
-      "Full-spectrum CCTV solutions from camera selection and pole/wall mounting through to NVR/DVR configuration, remote viewing setup and long-term storage planning. We support IP megapixel, PTZ and thermal imaging across both indoor and outdoor environments.",
+      "Full-spectrum CCTV solutions from camera selection and pole/wall mounting through to NVR/DVR configuration, remote viewing setup and long-term storage planning. We support IP megapixel, PTZ and thermal imaging across indoor and outdoor environments.",
     highlights: [
       "IP megapixel & PTZ cameras",
       "NVR / DVR setup & storage",
@@ -131,7 +137,8 @@ const SOLUTIONS: Solution[] = [
       { label: "Storage", value: "Local + Cloud" },
       { label: "Retention", value: "7 – 90 days" },
     ],
-    accent: "#E8C8C8",
+    image: "/images/hero/cctv.jpg",
+    href: "/solutions/cctv-surveillance",
   },
   {
     id: "access",
@@ -140,7 +147,7 @@ const SOLUTIONS: Solution[] = [
     title: "Access Control",
     tagline: "Intelligent entry management",
     description:
-      "From single-door keypad locks to multi-site biometric access systems, we design and install complete access control infrastructure — including electric strikes, maglocks, turnstiles, time-attendance terminals and full integration with your HR or visitor-management software.",
+      "From single-door keypad locks to multi-site biometric access systems, we design and install complete access control infrastructure — including electric strikes, maglocks, turnstiles, time-attendance terminals and full integration with your HR software.",
     highlights: [
       "Biometric, card & PIN systems",
       "Electric strikes & maglocks",
@@ -153,7 +160,8 @@ const SOLUTIONS: Solution[] = [
       { label: "Protocol", value: "Wiegand / OSDP" },
       { label: "Doors", value: "1 – Unlimited" },
     ],
-    accent: "#E8E0B8",
+    image: "/images/hero/hero-main.jpg",
+    href: "/solutions/access-control",
   },
   {
     id: "microwave",
@@ -175,7 +183,8 @@ const SOLUTIONS: Solution[] = [
       { label: "Range", value: "Up to 50 km" },
       { label: "Availability", value: "99.99% SLA" },
     ],
-    accent: "#B8D4E8",
+    image: "/images/hero/wireless.jpg",
+    href: "/solutions/wireless-links",
   },
   {
     id: "it",
@@ -184,7 +193,7 @@ const SOLUTIONS: Solution[] = [
     title: "IT Solutions",
     tagline: "Networks that scale with you",
     description:
-      "Holistic IT infrastructure design and deployment — routers, layer 2/3 switches, firewall configuration, VLAN segmentation, SD-WAN, load balancing and server room builds. We support Cisco, MikroTik, Fortinet and Ubiquiti environments, from SME to enterprise.",
+      "Holistic IT infrastructure design and deployment — routers, layer 2/3 switches, firewall configuration, VLAN segmentation, SD-WAN, load balancing and server room builds. We support Cisco, MikroTik, Fortinet and Ubiquiti environments.",
     highlights: [
       "Router, switch & firewall setup",
       "VLAN, QoS & SD-WAN config",
@@ -197,332 +206,168 @@ const SOLUTIONS: Solution[] = [
       { label: "Monitoring", value: "PRTG / Zabbix" },
       { label: "Scale", value: "SME to Enterprise" },
     ],
-    accent: "#B8E0BA",
+    image: "/images/hero/networking1.jpg",
+    href: "/solutions/managed-it-services",
   },
 ];
 
-const NAV_LINKS = ["Services", "Solutions", "Projects", "About Us", "Contact"];
+const CATEGORIES = ["All", ...Array.from(new Set(SOLUTIONS.map((s) => s.category)))];
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function useInView(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return { ref, visible };
-}
-
-// ─── Solution card ────────────────────────────────────────────────────────────
-function SolutionCard({ s, index }: { s: Solution; index: number }) {
+/* ── Solution Card ── */
+function SolutionCard({ solution }: { solution: Solution }) {
   const [open, setOpen] = useState(false);
-  const { ref, visible } = useInView(0.1);
-  const Icon = s.icon;
+  const Icon = solution.icon;
 
   return (
-    <div
-      ref={ref}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(32px)",
-        transition: `opacity .6s cubic-bezier(.22,1,.36,1) ${index * 0.07}s, transform .6s cubic-bezier(.22,1,.36,1) ${index * 0.07}s`,
-        background: "#fff",
-        border: "1px solid #E2E2E0",
-        borderRadius: "1rem",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {/* Coloured top bar */}
-      <div style={{ height: 4, background: s.accent }} />
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group">
 
-      {/* Header */}
-      <div style={{ padding: "1.5rem 1.5rem 1.25rem" }}>
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: ".75rem" }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: ".65rem",
-              background: s.accent + "30",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              flexShrink: 0,
-            }}>
-              <Icon size={20} color={s.accent === "#B8E0BA" ? "#3a7d44" : "#3a5f7d"} />
-            </div>
-            <div>
-              <div style={{ fontSize: ".65rem", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: ".1em", color: "var(--muted)", marginBottom: ".2rem" }}>{s.category}</div>
-              <div style={{ fontWeight: 800, fontSize: "1.05rem", color: "var(--ink)", letterSpacing: "-.02em" }}>{s.title}</div>
-            </div>
+      {/* Image */}
+      <div className="relative h-[200px] w-full overflow-hidden">
+        <Image
+          src={solution.image}
+          alt={solution.title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        {/* Category badge */}
+        <span className="absolute top-3 left-3 bg-[#7ac943] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+          {solution.category}
+        </span>
+        {/* Green accent bar */}
+        <span className="absolute bottom-0 left-0 w-10 h-[3px] bg-[#7ac943]" />
+      </div>
+
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-1">
+
+        {/* Icon + Title */}
+        <div className="flex items-start gap-3 mb-2">
+          <span className="flex-shrink-0 w-11 h-11 rounded-full border-2 border-[#7ac943] flex items-center justify-center bg-white">
+            <Icon className="w-5 h-5 text-[#7ac943]" strokeWidth={1.5} />
+          </span>
+          <div className="pt-1">
+            <h3 className="text-sm font-extrabold text-gray-900 uppercase leading-tight">
+              {solution.title}
+            </h3>
+            <p className="text-[10px] text-[#7ac943] font-semibold mt-0.5">{solution.tagline}</p>
           </div>
-          <span style={{
-            fontSize: ".65rem", fontFamily: "var(--font-mono)", background: s.accent + "30",
-            color: "var(--ink)", padding: ".25rem .6rem", borderRadius: "2rem",
-            whiteSpace: "nowrap", flexShrink: 0, alignSelf: "flex-start",
-          }}>{s.tagline}</span>
         </div>
 
-        <p style={{ marginTop: "1rem", fontSize: ".825rem", lineHeight: 1.7, color: "var(--muted)" }}>
-          {s.description}
+        {/* Description */}
+        <p className="text-xs text-gray-500 leading-relaxed mb-4">
+          {solution.description}
         </p>
-      </div>
 
-      {/* Spec pills */}
-      <div style={{ padding: "0 1.5rem", display: "flex", gap: ".5rem", flexWrap: "wrap" }}>
-        {s.specs.map(spec => (
-          <div key={spec.label} style={{
-            fontSize: ".68rem", fontFamily: "var(--font-mono)",
-            background: "#F7F7F5", border: "1px solid #E2E2E0",
-            borderRadius: ".4rem", padding: ".3rem .65rem",
-            color: "var(--ink)", display: "flex", gap: ".35rem", alignItems: "center",
-          }}>
-            <span style={{ color: "var(--muted)" }}>{spec.label}:</span>
-            <span style={{ fontWeight: 500 }}>{spec.value}</span>
-          </div>
-        ))}
-      </div>
+        {/* Spec pills */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {solution.specs.map((spec) => (
+            <span
+              key={spec.label}
+              className="text-[10px] font-semibold bg-gray-50 border border-gray-100 rounded-md px-2 py-1 text-gray-500"
+            >
+              <span className="text-gray-400">{spec.label}:</span> {spec.value}
+            </span>
+          ))}
+        </div>
 
-      {/* Expandable highlights */}
-      <div style={{ marginTop: "1rem", borderTop: "1px solid #F0F0EE" }}>
-        <button
-          onClick={() => setOpen(v => !v)}
-          style={{
-            width: "100%", padding: ".9rem 1.5rem",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            background: "none", border: "none", cursor: "pointer",
-            fontFamily: "var(--font-sans)", fontSize: ".78rem", fontWeight: 600,
-            color: "var(--ink)",
-          }}
-        >
-          Key Features
-          <ChevronDown size={15} style={{
-            transform: open ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform .25s",
-            color: "var(--muted)",
-          }} />
-        </button>
+        {/* Expandable highlights */}
+        <div className="border-t border-gray-100 mb-4">
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="w-full flex items-center justify-between py-3 text-xs font-bold text-gray-700 uppercase tracking-wide hover:text-[#7ac943] transition-colors"
+          >
+            Key Features
+            <ChevronDown
+              size={14}
+              className={`text-[#7ac943] transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+            />
+          </button>
 
-        <div style={{
-          maxHeight: open ? 300 : 0,
-          overflow: "hidden",
-          transition: "max-height .35s cubic-bezier(.22,1,.36,1)",
-        }}>
-          <div style={{ padding: ".25rem 1.5rem 1.25rem", display: "flex", flexDirection: "column", gap: ".6rem" }}>
-            {s.highlights.map(h => (
-              <div key={h} style={{ display: "flex", alignItems: "flex-start", gap: ".6rem" }}>
-                <CheckCircle2 size={14} style={{ color: s.accent === "#B8E0BA" ? "#3a7d44" : "#3a5f7d", flexShrink: 0, marginTop: 2 }} />
-                <span style={{ fontSize: ".8rem", color: "var(--muted)", lineHeight: 1.5 }}>{h}</span>
-              </div>
-            ))}
+          <div
+            className={`overflow-hidden transition-all duration-300 ${
+              open ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <div className="flex flex-col gap-2 pb-3">
+              {solution.highlights.map((h) => (
+                <div key={h} className="flex items-start gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#7ac943] flex-shrink-0 mt-0.5" />
+                  <span className="text-xs text-gray-500 leading-relaxed">{h}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* CTA */}
-      <div style={{ padding: "0 1.5rem 1.5rem", marginTop: "auto" }}>
-        <a href="#contact" style={{
-          display: "inline-flex", alignItems: "center", gap: ".4rem",
-          fontSize: ".78rem", fontWeight: 700, color: "var(--ink)",
-          textDecoration: "none",
-          borderBottom: `2px solid ${s.accent}`,
-          paddingBottom: "2px",
-          transition: "opacity .15s",
-        }}
-        onMouseEnter={e => (e.currentTarget.style.opacity = ".7")}
-        onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+        {/* Learn More */}
+        <Link
+          href={solution.href}
+          className="mt-auto inline-flex items-center gap-1.5 text-[#7ac943] text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-200"
         >
-          Enquire about this solution <ArrowRight size={13} />
-        </a>
+          Learn More <ArrowRight size={14} />
+        </Link>
       </div>
     </div>
   );
 }
 
-// ─── Category filter pill ─────────────────────────────────────────────────────
-function FilterPill({
-  label, active, onClick,
-}: { label: string; active: boolean; onClick: () => void }) {
-  return (
-    <button onClick={onClick} style={{
-      fontFamily: "var(--font-mono)", fontSize: ".72rem", letterSpacing: ".06em",
-      textTransform: "uppercase", padding: ".5rem 1.1rem", borderRadius: "2rem",
-      border: active ? "2px solid var(--ink)" : "1px solid #D0D0CE",
-      background: active ? "var(--ink)" : "#fff",
-      color: active ? "#fff" : "var(--muted)",
-      cursor: "pointer", transition: "all .2s",
-    }}>
-      {label}
-    </button>
-  );
-}
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+/* ── Page ── */
 export default function SolutionsPage() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [filter, setFilter] = useState("All");
-  const { ref: heroRef, visible: heroVisible } = useInView(0.05);
 
-  useEffect(() => { setMounted(true); }, []);
-
-  const categories = ["All", ...Array.from(new Set(SOLUTIONS.map(s => s.category)))];
-  const filtered = filter === "All" ? SOLUTIONS : SOLUTIONS.filter(s => s.category === filter);
+  const filtered =
+    filter === "All" ? SOLUTIONS : SOLUTIONS.filter((s) => s.category === filter);
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+    <main className="bg-[#f5f6f7] min-h-screen">
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-          --bg:       #F7F7F5;
-          --ink:      #0D0D0D;
-          --sage:     #B8E0BA;
-          --panel:    #111111;
-          --muted:    #6B6B6B;
-          --border:   #E2E2E0;
-          --font-sans: 'DM Sans', sans-serif;
-          --font-mono: 'DM Mono', monospace;
-        }
-        html { scroll-behavior: smooth; }
-        body {
-          font-family: var(--font-sans);
-          background: var(--bg);
-          color: var(--ink);
-          -webkit-font-smoothing: antialiased;
-        }
+      {/* ── Hero Banner ── */}
+      <section className="relative bg-black overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10" />
+        <div className="absolute inset-0 bg-[url('/images/hero/networking.jpg')] bg-cover bg-center opacity-30" />
+        <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full bg-[#7ac943]/10 blur-3xl pointer-events-none z-10" />
 
-        @keyframes fadeUp {
-          from { opacity:0; transform:translateY(28px); }
-          to   { opacity:1; transform:translateY(0);    }
-        }
-        .fu { opacity:0; }
-        .fu.go { animation: fadeUp .7s cubic-bezier(.22,1,.36,1) forwards; }
-        .d1{animation-delay:.08s} .d2{animation-delay:.18s}
-        .d3{animation-delay:.28s} .d4{animation-delay:.38s}
-
-        .nav-link {
-          font-size:.875rem; font-weight:500; color:var(--muted);
-          text-decoration:none; transition:color .15s; white-space:nowrap;
-        }
-        .nav-link:hover { color:var(--ink); }
-        .nav-link.active { color:var(--ink); font-weight:700; }
-
-        .mobile-menu {
-          position:fixed; inset:0; z-index:200;
-          background:var(--bg);
-          display:flex; flex-direction:column;
-          padding:5rem 2rem 2rem; gap:2rem;
-          transform:translateX(100%);
-          transition:transform .3s cubic-bezier(.22,1,.36,1);
-        }
-        .mobile-menu.open { transform:translateX(0); }
-        .mobile-menu .nav-link { font-size:1.5rem; font-weight:700; color:var(--ink); }
-
-        @media(max-width:768px){
-          .desk-nav  { display:none!important; }
-          .burger    { display:flex!important; }
-        }
-        @media(min-width:769px){
-          .burger { display:none!important; }
-        }
-      `}</style>
-
-      {/* ── NAVBAR ── */}
-             <Navbar />
-    
-
-      {/* ── HERO BANNER ── */}
-      <section style={{
-        background:"var(--ink)", color:"#fff",
-        padding:"5.5rem 1.5rem 4.5rem",
-        position:"relative", overflow:"hidden",
-      }}>
-        {/* Background grid texture */}
-        <div style={{
-          position:"absolute", inset:0, opacity:.04,
-          backgroundImage:"linear-gradient(var(--sage) 1px, transparent 1px), linear-gradient(90deg, var(--sage) 1px, transparent 1px)",
-          backgroundSize:"48px 48px",
-          pointerEvents:"none",
-        }}/>
-        {/* Sage glow blob */}
-        <div style={{
-          position:"absolute", right:"-5%", top:"10%",
-          width:500, height:500, borderRadius:"50%",
-          background:"radial-gradient(circle, rgba(184,224,186,.12) 0%, transparent 65%)",
-          pointerEvents:"none",
-        }}/>
-
-        <div ref={heroRef} style={{ maxWidth:1200, margin:"0 auto", position:"relative" }}>
+        <div className="relative z-20 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
           {/* Breadcrumb */}
-          <div className={`fu d1${heroVisible && mounted ? " go" : ""}`} style={{
-            display:"flex", alignItems:"center", gap:".5rem",
-            marginBottom:"1.5rem",
-          }}>
-            <a href="/" style={{ fontSize:".75rem", fontFamily:"var(--font-mono)", color:"rgba(255,255,255,.4)", textDecoration:"none" }}>Home</a>
-            <span style={{ color:"rgba(255,255,255,.3)", fontSize:".7rem" }}>/</span>
-            <span style={{ fontSize:".75rem", fontFamily:"var(--font-mono)", color:"var(--sage)" }}>Solutions</span>
+          <div className="flex items-center gap-2 text-xs text-white/50 uppercase tracking-widest font-semibold mb-6">
+            <Link href="/" className="hover:text-[#7ac943] transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-[#7ac943]">Solutions</span>
           </div>
 
-          <div style={{ display:"grid", gridTemplateColumns:"1fr auto", gap:"2rem", alignItems:"end" }}
-               className="hero-inner">
-            <style>{`@media(max-width:700px){.hero-inner{grid-template-columns:1fr!important}}`}</style>
+          <div className="grid lg:grid-cols-2 gap-10 items-end">
             <div>
-              <div className={`fu d1${heroVisible && mounted ? " go" : ""}`}>
-                <span style={{
-                  display:"inline-flex", alignItems:"center", gap:".5rem",
-                  fontSize:".7rem", fontFamily:"var(--font-mono)",
-                  color:"var(--sage)", textTransform:"uppercase", letterSpacing:".12em",
-                  marginBottom:"1rem",
-                }}>
-                  <span style={{ width:24, height:1, background:"var(--sage)", display:"inline-block" }}/>
-                  What we offer
+              <h1 className="text-white font-black leading-none tracking-tight">
+                <span className="text-3xl sm:text-4xl lg:text-5xl">End-to-End</span>
+                <span className="block text-[#7ac943] text-4xl sm:text-5xl lg:text-6xl mt-1">
+                  Network Solutions
                 </span>
-              </div>
-              <h1 className={`fu d2${heroVisible && mounted ? " go" : ""}`} style={{
-                fontSize:"clamp(2.6rem,6vw,4.8rem)",
-                fontWeight:900, lineHeight:1.0,
-                letterSpacing:"-.03em",
-              }}>
-                End-to-end<br/>
-                <span style={{ color:"var(--sage)" }}>network</span><br/>
-                solutions.
               </h1>
-              <p className={`fu d3${heroVisible && mounted ? " go" : ""}`} style={{
-                marginTop:"1.25rem",
-                fontSize:".95rem", color:"rgba(255,255,255,.55)",
-                lineHeight:1.7, maxWidth:500,
-              }}>
-                From fibre and wireless to voice, security and IT infrastructure —
-                every solution is designed, installed and supported end-to-end by our team.
+              <p className="mt-5 text-sm md:text-base text-white/70 max-w-xl">
+                From fibre and wireless to voice, security and IT infrastructure — every solution is designed, installed and supported end-to-end by our team.
               </p>
+              <Link
+                href="/contact"
+                className="mt-8 inline-flex items-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
+              >
+                Book a Site Assessment <ArrowRight size={16} />
+              </Link>
             </div>
 
-            {/* Stat block */}
-            <div className={`fu d4${heroVisible && mounted ? " go" : ""}`} style={{
-              display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1px",
-              background:"rgba(255,255,255,.08)", borderRadius:".75rem",
-              overflow:"hidden", flexShrink:0,
-            }}>
+            {/* Stats block */}
+            <div className="grid grid-cols-2 gap-3">
               {[
-                ["8", "Solutions"],
-                ["100%", "End-to-end"],
-                ["24 / 7", "Support"],
-                ["SA-wide", "Coverage"],
-              ].map(([v, l]) => (
-                <div key={l} style={{
-                  padding:"1.1rem 1.4rem",
-                  background:"rgba(255,255,255,.04)",
-                  display:"flex", flexDirection:"column", gap:".2rem",
-                }}>
-                  <div style={{ fontSize:"1.4rem", fontWeight:900, letterSpacing:"-.03em", color:"#fff" }}>{v}</div>
-                  <div style={{ fontSize:".65rem", fontFamily:"var(--font-mono)", color:"rgba(255,255,255,.4)", textTransform:"uppercase", letterSpacing:".08em" }}>{l}</div>
+                { value: "8", label: "Solutions" },
+                { value: "100%", label: "End-to-End" },
+                { value: "24/7", label: "Support" },
+                { value: "SA-Wide", label: "Coverage" },
+              ].map(({ value, label }) => (
+                <div
+                  key={label}
+                  className="bg-white/5 border border-white/10 rounded-xl p-5 flex flex-col gap-1"
+                >
+                  <p className="text-2xl font-extrabold text-[#7ac943] leading-tight">{value}</p>
+                  <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{label}</p>
                 </div>
               ))}
             </div>
@@ -530,159 +375,85 @@ export default function SolutionsPage() {
         </div>
       </section>
 
-      {/* ── FILTER BAR ── */}
-      <div style={{
-        background:"#fff",
-        borderBottom:"1px solid var(--border)",
-        position:"sticky", top:62, zIndex:50,
-      }}>
-        <div style={{
-          maxWidth:1200, margin:"0 auto",
-          padding:".9rem 1.5rem",
-          display:"flex", gap:".6rem", flexWrap:"wrap", alignItems:"center",
-        }}>
-          <span style={{ fontSize:".7rem", fontFamily:"var(--font-mono)", color:"var(--muted)", textTransform:"uppercase", letterSpacing:".1em", marginRight:".25rem" }}>
-            Filter:
-          </span>
-          {categories.map(c => (
-            <FilterPill key={c} label={c} active={filter === c} onClick={() => setFilter(c)} />
-          ))}
-          <span style={{ marginLeft:"auto", fontSize:".72rem", fontFamily:"var(--font-mono)", color:"var(--muted)" }}>
-            {filtered.length} solution{filtered.length !== 1 ? "s" : ""}
-          </span>
-        </div>
-      </div>
-
-      {/* ── SOLUTIONS GRID ── */}
-      <section id="solutions" style={{ padding:"4rem 1.5rem 5rem", background:"var(--bg)" }}>
-        <div style={{
-          maxWidth:1200, margin:"0 auto",
-          display:"grid",
-          gridTemplateColumns:"repeat(auto-fill, minmax(340px, 1fr))",
-          gap:"1.5rem",
-        }}>
-          {filtered.map((s, i) => (
-            <SolutionCard key={s.id} s={s} index={i} />
-          ))}
+      {/* ── Filter Bar ── */}
+      <section className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 overflow-x-auto py-4 scrollbar-hide">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`flex-shrink-0 text-[11px] font-bold uppercase tracking-wider px-4 py-2 rounded-md border transition-colors duration-200 ${
+                  filter === cat
+                    ? "bg-[#7ac943] text-white border-[#7ac943]"
+                    : "bg-white text-gray-500 border-gray-200 hover:border-[#7ac943] hover:text-[#7ac943]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+            <span className="ml-auto flex-shrink-0 text-[11px] font-semibold text-gray-400">
+              {filtered.length} solution{filtered.length !== 1 ? "s" : ""}
+            </span>
+          </div>
         </div>
       </section>
 
-      {/* ── CTA BAND ── */}
-      <section style={{
-        background:"var(--sage)", padding:"4rem 1.5rem",
-        position:"relative", overflow:"hidden",
-      }}>
-        <div style={{
-          position:"absolute", left:"-3%", top:"-40%",
-          width:400, height:400, borderRadius:"50%",
-          background:"rgba(255,255,255,.2)",
-          pointerEvents:"none",
-        }}/>
-        <div style={{
-          maxWidth:1200, margin:"0 auto",
-          display:"flex", alignItems:"center", justifyContent:"space-between",
-          gap:"2rem", flexWrap:"wrap",
-        }}>
-          <div>
-            <h2 style={{ fontSize:"clamp(1.6rem,3.5vw,2.4rem)", fontWeight:900, color:"var(--ink)", letterSpacing:"-.02em" }}>
-              Not sure which solution fits?
+      {/* ── Solutions Grid ── */}
+      <section className="py-16 lg:py-24">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 uppercase tracking-tight mb-3">
+              All <span className="text-[#7ac943]">Solutions</span>
             </h2>
-            <p style={{ marginTop:".5rem", fontSize:".9rem", color:"rgba(13,13,13,.65)" }}>
-              Our engineers will assess your site and recommend the right technology stack.
+            <div className="flex justify-center mb-4">
+              <span className="h-[3px] w-14 bg-[#7ac943] rounded-full" />
+            </div>
+            <p className="text-gray-500 text-sm">
+              Professional technology solutions designed to connect, protect and power your world.
             </p>
           </div>
-          <div style={{ display:"flex", gap:"1rem", flexWrap:"wrap" }}>
-            <a href="#contact" style={{
-              display:"inline-flex", alignItems:"center", gap:".5rem",
-              background:"var(--ink)", color:"#fff",
-              fontFamily:"var(--font-sans)", fontWeight:700, fontSize:".875rem",
-              padding:".85rem 1.75rem", borderRadius:".55rem",
-              textDecoration:"none", transition:"opacity .15s",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.opacity=".85")}
-            onMouseLeave={e => (e.currentTarget.style.opacity="1")}
-            >
-              Book a Site Assessment <ArrowRight size={15}/>
-            </a>
-            <a href="mailto:info@nobstech.co.za" style={{
-              display:"inline-flex", alignItems:"center", gap:".5rem",
-              background:"rgba(255,255,255,.6)", color:"var(--ink)",
-              fontFamily:"var(--font-sans)", fontWeight:700, fontSize:".875rem",
-              padding:".85rem 1.75rem", borderRadius:".55rem",
-              textDecoration:"none", transition:"background .15s",
-              border:"none",
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background="rgba(255,255,255,.85)")}
-            onMouseLeave={e => (e.currentTarget.style.background="rgba(255,255,255,.6)")}
-            >
-              <Mail size={15}/> info@nobstech.co.za
-            </a>
-          </div>
-        </div>
-      </section>
 
-      {/* ── FOOTER ── */}
-      <footer id="contact" style={{ background:"var(--ink)", color:"#fff", padding:"3.5rem 1.5rem 2rem" }}>
-        <div style={{
-          maxWidth:1200, margin:"0 auto",
-          display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:"2.5rem",
-        }}>
-          <div>
-            <div style={{ fontWeight:900, fontSize:"1.05rem", letterSpacing:".06em" }}>N.O.B.S Technologies</div>
-            <div style={{ fontSize:".7rem", color:"rgba(255,255,255,.45)", fontFamily:"var(--font-mono)", marginTop:".3rem" }}>
-              Network Operations & Broadband Solutions
-            </div>
-            <div style={{ marginTop:"1.2rem", display:"flex", flexDirection:"column", gap:".6rem" }}>
-              {[
-                { Icon:Mail,  text:"info@nobstech.co.za" },
-                { Icon:Phone, text:"nobstech.co.za" },
-              ].map(({ Icon, text }) => (
-                <div key={text} style={{ display:"flex", alignItems:"center", gap:".5rem", fontSize:".75rem", color:"rgba(255,255,255,.55)" }}>
-                  <Icon size={12} color="var(--sage)"/>{text}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <div style={{ fontWeight:700, fontSize:".8rem", letterSpacing:".06em", textTransform:"uppercase", marginBottom:"1rem" }}>Quick Links</div>
-            {NAV_LINKS.map(l => (
-              <a key={l} href={`/#${l.toLowerCase().replace(" ","-")}`}
-                 style={{ display:"block", fontSize:".8rem", color:"rgba(255,255,255,.55)", marginBottom:".5rem", textDecoration:"none", transition:"color .15s" }}
-                 onMouseEnter={e=>(e.currentTarget.style.color="#fff")}
-                 onMouseLeave={e=>(e.currentTarget.style.color="rgba(255,255,255,.55)")}
-              >{l}</a>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {filtered.map((solution) => (
+              <SolutionCard key={solution.id} solution={solution} />
             ))}
           </div>
-          <div>
-            <div style={{ fontWeight:700, fontSize:".8rem", letterSpacing:".06em", textTransform:"uppercase", marginBottom:"1rem" }}>Get Started</div>
-            <p style={{ fontSize:".8rem", color:"rgba(255,255,255,.55)", lineHeight:1.6, marginBottom:"1.25rem" }}>
-              Ready to transform your network infrastructure?
-            </p>
-            <a href="#contact" style={{
-              display:"inline-flex", alignItems:"center", gap:".5rem",
-              background:"var(--sage)", color:"var(--ink)",
-              fontFamily:"var(--font-sans)", fontWeight:700, fontSize:".8rem",
-              padding:".65rem 1.3rem", borderRadius:".45rem",
-              textDecoration:"none",
-            }}>
-              Request a Quote <ArrowRight size={13}/>
-            </a>
+        </div>
+      </section>
+
+      {/* ── CTA Banner ── */}
+      <section className="bg-black py-16 lg:py-20 relative overflow-hidden">
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#7ac943]/10 blur-3xl pointer-events-none" />
+        <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-[#7ac943] rounded-2xl px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 className="text-white font-extrabold text-xl lg:text-2xl uppercase tracking-tight leading-tight">
+                Not Sure Which Solution Fits?
+                <span className="block font-normal text-white/80 text-sm mt-1 normal-case tracking-normal">
+                  Our engineers will assess your site and recommend the right technology stack.
+                </span>
+              </h3>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 bg-black hover:bg-white/10 transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md border border-white/20"
+              >
+                Book Assessment <ArrowRight size={16} />
+              </Link>
+              <Link
+                href="mailto:info@nobstechnologies.co.za"
+                className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
+              >
+                Email Us <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
         </div>
-        <div style={{
-          borderTop:"1px solid rgba(255,255,255,.08)",
-          marginTop:"2.5rem", paddingTop:"1.5rem",
-          display:"flex", alignItems:"center", justifyContent:"space-between",
-          flexWrap:"wrap", gap:".75rem",
-        }}>
-          <span style={{ fontSize:".7rem", color:"rgba(255,255,255,.3)", fontFamily:"var(--font-mono)" }}>
-            © 2026 N.O.B.S Technologies. All rights reserved.
-          </span>
-          <span style={{ fontSize:".7rem", color:"rgba(255,255,255,.2)", fontFamily:"var(--font-mono)" }}>
-            Real Networks · Real Solutions
-          </span>
-        </div>
-      </footer>
-    </>
+      </section>
+
+    </main>
   );
 }
