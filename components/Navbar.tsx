@@ -20,7 +20,7 @@ const NAV_LINKS = [
   { label: "HOME", href: "/" },
   { label: "ABOUT US", href: "/about" },
   { label: "SOLUTIONS", href: "/solutions", hasDropdown: true },
-  { label: "PRODUCTS", href: "/products", hasDropdown: true },
+  { label: "PRODUCTS", href: "/shop", hasDropdown: true },
   { label: "PROJECTS", href: "/projects" },
   { label: "BLOG", href: "/blog" },
   { label: "CONTACT US", href: "/contact" },
@@ -38,12 +38,12 @@ const SOLUTIONS_LINKS = [
 ];
 
 const PRODUCTS_LINKS = [
-  { label: "CCTV Cameras", href: "/products/cctv" },
-  { label: "Access Control Systems", href: "/products/access-control" },
-  { label: "Networking Equipment", href: "/products/networking" },
-  { label: "Wireless Devices", href: "/products/wireless" },
-  { label: "Power Solutions", href: "/products/power" },
-  { label: "Cabling & Accessories", href: "/products/cabling" },
+  { label: "CCTV Cameras", href: "/shop/cctv" },
+  { label: "Access Control Systems", href: "/shop/access-control" },
+  { label: "Networking Equipment", href: "/shop/networking" },
+  { label: "Wireless Devices", href: "/shop/wireless" },
+  { label: "Power Solutions", href: "/shop/power" },
+  { label: "Cabling & Accessories", href: "/shop/cabling" },
 ];
 
 const SOCIALS = [

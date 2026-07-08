@@ -1,23 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import Navbar from "@/components/Navbar";
-
-/**
- * DESIGN TOKENS (matching your home page):
- * Primary:   #0D0D0D  (near-black)
- * Accent:    #B8E0BA  (sage green)
- * Surface:   #F7F7F5  (warm off-white)
- * Fonts:     DM Sans (body), DM Mono (accents)
- */
 
 const PROJECTS = [
   {
     id: 1,
     title: "Enterprise Fiber Network",
     category: "Fiber Optic Infrastructure",
-    description: "Complete fiber optic network deployment for a Fortune 500 financial institution across 15 office locations.",
+    description:
+      "Complete fiber optic network deployment for a Fortune 500 financial institution across 15 office locations.",
     metrics: [
       { label: "Locations", value: "15" },
       { label: "Fiber Deployed", value: "450km" },
@@ -30,7 +23,8 @@ const PROJECTS = [
     id: 2,
     title: "Unified Communications Platform",
     category: "VoIP & PBX Systems",
-    description: "Implementation of enterprise VoIP and unified communications system supporting 500+ users across distributed offices.",
+    description:
+      "Implementation of enterprise VoIP and unified communications system supporting 500+ users across distributed offices.",
     metrics: [
       { label: "Users", value: "500+" },
       { label: "Call Quality", value: "HD Audio" },
@@ -43,7 +37,8 @@ const PROJECTS = [
     id: 3,
     title: "Secure Data Center Cabling",
     category: "Structured Cabling",
-    description: "Design and installation of Cat6A structured cabling infrastructure for a tier-3 data center facility.",
+    description:
+      "Design and installation of Cat6A structured cabling infrastructure for a tier-3 data center facility.",
     metrics: [
       { label: "Ports", value: "2,400+" },
       { label: "Cable", value: "180km" },
@@ -56,7 +51,8 @@ const PROJECTS = [
     id: 4,
     title: "Campus Wireless Network",
     category: "Wireless Infrastructure",
-    description: "Large-scale WiFi 6 deployment covering 150,000 sqm university campus with seamless roaming.",
+    description:
+      "Large-scale WiFi 6 deployment covering 150,000 sqm university campus with seamless roaming.",
     metrics: [
       { label: "Coverage", value: "150k sqm" },
       { label: "APs", value: "280+" },
@@ -69,7 +65,8 @@ const PROJECTS = [
     id: 5,
     title: "Integrated Security System",
     category: "Access Control & CCTV",
-    description: "End-to-end security solution combining biometric access control with 4K IP camera network.",
+    description:
+      "End-to-end security solution combining biometric access control with 4K IP camera network.",
     metrics: [
       { label: "Cameras", value: "180" },
       { label: "Access Points", value: "45" },
@@ -82,7 +79,8 @@ const PROJECTS = [
     id: 6,
     title: "Point-to-Point Microwave Link",
     category: "Microwave Radio",
-    description: "Long-distance microwave radio link connecting two data centers 85km apart with redundant paths.",
+    description:
+      "Long-distance microwave radio link connecting two data centers 85km apart with redundant paths.",
     metrics: [
       { label: "Distance", value: "85km" },
       { label: "Bandwidth", value: "1Gbps" },
@@ -94,91 +92,66 @@ const PROJECTS = [
 ];
 
 export default function Projects() {
-  const [mounted, setMounted] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const categories = Array.from(new Set(PROJECTS.map(p => p.category)));
+  const categories = Array.from(new Set(PROJECTS.map((p) => p.category)));
   const filteredProjects = selectedCategory
-    ? PROJECTS.filter(p => p.category === selectedCategory)
+    ? PROJECTS.filter((p) => p.category === selectedCategory)
     : PROJECTS;
 
   return (
     <>
-      {/* HEADER */}
-      <section style={{
-        background: "#F7F7F5",
-        padding: "5rem 1.5rem 3rem",
-        borderBottom: "1px solid #E2E2E0",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-          display: "flex", flexDirection: "column", gap: "2rem",
-        }}>
-          {/* Eyebrow */}
-          <div className={`fade-up delay-1${mounted ? " ready" : ""}`}
-               style={{ display: "inline-flex", alignItems: "center", gap: ".5rem", width: "fit-content" }}>
-            <span style={{
-              display: "inline-block", width: 8, height: 8, borderRadius: "50%",
-              background: "#B8E0BA",
-            }} />
-            <span style={{ fontSize: ".75rem", fontFamily: "'DM Mono', monospace", color: "#6B6B6B", letterSpacing: ".1em", textTransform: "uppercase" }}>
-              Our Work
-            </span>
+      {/* ── Hero Banner ── */}
+      <section className="relative bg-black overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10" />
+        <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full bg-[#7ac943]/10 blur-3xl pointer-events-none z-10" />
+
+        <div className="relative z-20 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+          <div className="flex items-center gap-2 text-xs text-white/50 uppercase tracking-widest font-semibold mb-6">
+            <Link href="/" className="hover:text-[#7ac943] transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-[#7ac943]">Projects</span>
           </div>
 
-          {/* Headline */}
-          <h1 className={`fade-up delay-2${mounted ? " ready" : ""}`} style={{
-            fontSize: "clamp(2.2rem, 5vw, 4rem)",
-            fontWeight: 900,
-            lineHeight: 1.1,
-            letterSpacing: "-.02em",
-            color: "#0D0D0D",
-            fontFamily: "'DM Sans', sans-serif",
-          }}>
-            Delivered Projects
+          <h1 className="text-white font-black leading-none tracking-tight">
+            <span className="text-3xl sm:text-4xl lg:text-5xl">Delivered</span>
+            <span className="block text-[#7ac943] text-4xl sm:text-5xl lg:text-6xl mt-1">
+              Projects
+            </span>
           </h1>
 
-          {/* Description */}
-          <p className={`fade-up delay-3${mounted ? " ready" : ""}`} style={{
-            fontSize: ".975rem", lineHeight: 1.7, color: "#6B6B6B", maxWidth: 600,
-            fontFamily: "'DM Sans', sans-serif",
-          }}>
-            Explore our portfolio of successfully completed network infrastructure, communication systems, and security solutions across diverse industries and scales.
+          <p className="mt-5 text-sm md:text-base text-white/70 max-w-xl">
+            A portfolio of successfully completed network infrastructure, communication systems and security solutions across diverse industries and scales.
           </p>
         </div>
       </section>
 
-      {/* FILTERS */}
-      <section style={{
-        background: "#F7F7F5",
-        padding: "2.5rem 1.5rem",
-        borderBottom: "1px solid #E2E2E0",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-          display: "flex", flexDirection: "column", gap: "1.5rem",
-        }}>
-          <div style={{ fontSize: ".875rem", fontWeight: 600, color: "#6B6B6B", letterSpacing: ".05em", textTransform: "uppercase", fontFamily: "'DM Sans', sans-serif" }}>
+      {/* ── Filters ── */}
+      <section className="bg-white py-8 lg:py-10 border-b border-gray-100">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
             Filter by Category
-          </div>
-          <div style={{
-            display: "flex", flexWrap: "wrap", gap: ".75rem",
-          }}>
+          </span>
+          <div className="flex flex-wrap gap-3">
             <button
               onClick={() => setSelectedCategory(null)}
-              className={`filter-btn${selectedCategory === null ? " active" : ""}`}
+              className={`text-xs font-bold uppercase tracking-wide px-5 py-2.5 rounded-full border transition-colors duration-200 ${
+                selectedCategory === null
+                  ? "bg-[#7ac943] border-[#7ac943] text-white"
+                  : "bg-white border-gray-200 text-gray-600 hover:border-[#7ac943] hover:text-[#7ac943]"
+              }`}
             >
               All Projects
             </button>
-            {categories.map(cat => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`filter-btn${selectedCategory === cat ? " active" : ""}`}
+                className={`text-xs font-bold uppercase tracking-wide px-5 py-2.5 rounded-full border transition-colors duration-200 ${
+                  selectedCategory === cat
+                    ? "bg-[#7ac943] border-[#7ac943] text-white"
+                    : "bg-white border-gray-200 text-gray-600 hover:border-[#7ac943] hover:text-[#7ac943]"
+                }`}
               >
                 {cat}
               </button>
@@ -187,141 +160,89 @@ export default function Projects() {
         </div>
       </section>
 
-      {/* PROJECTS GRID */}
-      <section style={{
-        background: "#F7F7F5",
-        padding: "4rem 1.5rem",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-          gap: "2rem",
-        }}>
-          {filteredProjects.map((project, idx) => (
+      {/* ── Projects Grid ── */}
+      <section className="bg-[#f5f6f7] py-16 lg:py-24">
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className={`project-card fade-up${mounted ? " ready" : ""}`}
-              style={{
-                animationDelay: `${0.1 + idx * 0.12}s`,
-              }}
+              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col group hover:border-[#7ac943]/40 transition-colors duration-300"
             >
               {/* Year badge */}
-              <div style={{
-                display: "inline-block",
-                background: "rgba(184,224,186,.15)",
-                color: "#B8E0BA",
-                fontSize: ".7rem",
-                padding: ".4rem .8rem",
-                borderRadius: ".35rem",
-                fontFamily: "'DM Mono', monospace",
-                letterSpacing: ".05em",
-                marginBottom: "1rem",
-              }}>
+              <span className="inline-block bg-[#7ac943]/10 text-[#7ac943] text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full w-fit mb-3">
                 {project.year}
-              </div>
+              </span>
 
               {/* Category */}
-              <div style={{
-                fontSize: ".75rem", color: "#6B6B6B", fontFamily: "'DM Mono', monospace",
-                letterSpacing: ".05em", textTransform: "uppercase", marginBottom: ".5rem",
-              }}>
+              <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">
                 {project.category}
-              </div>
+              </span>
 
               {/* Title */}
-              <h3 style={{
-                fontSize: "1.4rem", fontWeight: 700, color: "#0D0D0D",
-                lineHeight: 1.2, marginBottom: "1rem", fontFamily: "'DM Sans', sans-serif",
-              }}>
+              <h3 className="text-lg font-extrabold text-gray-900 leading-tight mb-3">
                 {project.title}
               </h3>
 
               {/* Description */}
-              <p style={{
-                fontSize: ".9rem", lineHeight: 1.6, color: "#6B6B6B",
-                marginBottom: "1.5rem", fontFamily: "'DM Sans', sans-serif",
-              }}>
+              <p className="text-xs text-gray-500 leading-relaxed mb-5 flex-1">
                 {project.description}
               </p>
 
               {/* Metrics */}
-              <div style={{
-                display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "1rem", marginBottom: "1.5rem",
-                paddingBottom: "1.5rem", borderBottom: "1px solid #E2E2E0",
-              }}>
-                {project.metrics.map((m, i) => (
-                  <div key={i} className="metric-item">
-                    <div className="metric-value">{m.value}</div>
-                    <div className="metric-label">{m.label}</div>
+              <div className="grid grid-cols-3 gap-2 mb-5 pb-5 border-b border-gray-100">
+                {project.metrics.map((m) => (
+                  <div key={m.label} className="text-center">
+                    <p className="text-sm font-extrabold text-[#7ac943] leading-tight">
+                      {m.value}
+                    </p>
+                    <p className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide leading-tight mt-1">
+                      {m.label}
+                    </p>
                   </div>
                 ))}
               </div>
 
               {/* Tags */}
-              <div style={{
-                display: "flex", flexWrap: "wrap", gap: ".5rem", marginBottom: "1.5rem",
-              }}>
-                {project.tags.map(tag => (
-                  <span key={tag} className="tag">{tag}</span>
+              <div className="flex flex-wrap gap-2 mb-5">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[10px] font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full"
+                  >
+                    {tag}
+                  </span>
                 ))}
               </div>
 
               {/* CTA */}
-              <button style={{
-                display: "inline-flex", alignItems: "center", gap: ".5rem",
-                background: "transparent", border: "none",
-                color: "#B8E0BA", fontFamily: "'DM Sans', sans-serif",
-                fontSize: ".875rem", fontWeight: 600, cursor: "pointer",
-                transition: "gap .2s",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.gap = "1rem")}
-              onMouseLeave={e => (e.currentTarget.style.gap = ".5rem")}
+              <Link
+                href={`/projects/${project.id}`}
+                className="inline-flex items-center gap-1.5 text-[#7ac943] text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-200"
               >
-                View Case Study <ArrowRight size={16} />
-              </button>
+                View Case Study <ArrowRight size={14} />
+              </Link>
             </div>
           ))}
         </div>
       </section>
 
-      {/* CTA SECTION */}
-      <section style={{
-        background: "#0D0D0D",
-        padding: "5rem 1.5rem",
-        color: "#fff",
-      }}>
-        <div style={{
-          maxWidth: 1200, margin: "0 auto",
-          textAlign: "center",
-          display: "flex", flexDirection: "column", gap: "2rem", alignItems: "center",
-        }}>
-          <h2 style={{
-            fontSize: "clamp(2rem, 4vw, 3.2rem)",
-            fontWeight: 900, lineHeight: 1.2,
-            fontFamily: "'DM Sans', sans-serif",
-          }}>
-            Ready to Start Your Project?
+      {/* ── CTA Banner ── */}
+      <section className="bg-black py-16 lg:py-20 relative overflow-hidden">
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#7ac943]/10 blur-3xl pointer-events-none" />
+        <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center gap-6">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-white uppercase tracking-tight">
+            Ready to <span className="text-[#7ac943]">Start Your Project?</span>
           </h2>
-          <p style={{
-            fontSize: ".975rem", lineHeight: 1.7, color: "rgba(255,255,255,.7)",
-            maxWidth: 600, fontFamily: "'DM Sans', sans-serif",
-          }}>
-            Let's discuss how we can design and deploy the perfect network infrastructure solution for your organization.
+          <span className="h-[3px] w-14 bg-[#7ac943] rounded-full" />
+          <p className="text-white/60 text-sm max-w-xl leading-relaxed">
+            Let&apos;s discuss how we can design and deploy the perfect network infrastructure solution for your organisation.
           </p>
-          <a href="#contact" style={{
-            display: "inline-flex", alignItems: "center", gap: ".5rem",
-            background: "#B8E0BA", color: "#0D0D0D",
-            fontFamily: "'DM Sans', sans-serif", fontWeight: 700, fontSize: ".875rem",
-            padding: ".8rem 1.6rem", borderRadius: ".5rem",
-            textDecoration: "none", transition: "opacity .2s",
-          }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = ".85")}
-          onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-8 py-4 rounded-md"
           >
             Get a Quote <ArrowRight size={16} />
-          </a>
+          </Link>
         </div>
       </section>
     </>

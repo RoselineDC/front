@@ -356,55 +356,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Leadership Team ── */}
-      {/* <section className="bg-white py-16 lg:py-24">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="text-center mb-12">
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900 uppercase tracking-tight mb-3">
-              Our <span className="text-[#7ac943]">Team</span>
-            </h2>
-            <div className="flex justify-center mb-4">
-              <span className="h-[3px] w-14 bg-[#7ac943] rounded-full" />
-            </div>
-            <p className="text-gray-500 text-sm max-w-lg mx-auto">
-              Our experienced leadership team brings decades of combined expertise in network infrastructure and enterprise solutions.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {team.map(({ name, role, expertise, image }) => (
-              <div
-                key={name}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col group"
-              >
-                {/* Photo *
-                <div className="relative h-[200px] w-full overflow-hidden bg-gray-100">
-                  <Image
-                    src={image}
-                    alt={name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <span className="absolute bottom-0 left-0 w-10 h-[3px] bg-[#7ac943]" />
-                </div>
-
-                {/* Info *
-                <div className="p-5 flex flex-col gap-2">
-                  <span className="text-[10px] font-bold text-[#7ac943] uppercase tracking-widest">
-                    {role}
-                  </span>
-                  <h3 className="text-sm font-extrabold text-gray-900 uppercase leading-tight">
-                    {name}
-                  </h3>
-                  <p className="text-xs text-gray-400">{expertise}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
       {/* ── CTA Banner ── */}
       <section className="bg-black py-16 lg:py-20 relative overflow-hidden">
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-[#7ac943]/10 blur-3xl pointer-events-none" />
