@@ -159,7 +159,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Stats ── */}
+      {/* ── Stats ── *
       <section className="bg-white py-16 lg:py-20">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
@@ -303,7 +303,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Our Journey / Timeline ── */}
+      {/* ── Our Journey / Timeline ── 
       <section className="bg-[#f5f6f7] py-16 lg:py-24">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -325,18 +325,18 @@ export default function AboutPage() {
                   idx !== timeline.length - 1 ? "border-b border-gray-100" : ""
                 }`}
               >
-                {/* Year badge */}
+                {/* Year badge 
                 <div className="flex-shrink-0 flex sm:flex-col items-center sm:items-start gap-3 sm:gap-0 sm:w-28">
                   <span className="inline-flex items-center justify-center bg-[#7ac943]/10 text-[#7ac943] text-sm font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-md w-fit">
                     {year}
                   </span>
-                  {/* Connector line on desktop */}
+                  {/* Connector line on desktop 
                   {idx !== timeline.length - 1 && (
                     <span className="hidden sm:block w-[2px] flex-1 bg-[#7ac943]/20 mt-3 ml-[22px]" />
                   )}
                 </div>
 
-                {/* Content */}
+                {/* Content 
                 <div className="flex items-start gap-4">
                   <span className="flex-shrink-0 mt-1 w-7 h-7 rounded-full border-2 border-[#7ac943] flex items-center justify-center bg-white">
                     <svg className="w-3 h-3 text-[#7ac943]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
@@ -355,6 +355,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
 
       {/* ── CTA Banner ── */}
       <section className="bg-black py-16 lg:py-20 relative overflow-hidden">
