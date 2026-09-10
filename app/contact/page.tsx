@@ -404,7 +404,7 @@ export default function ContactPage() {
               {/* Google Map Embed */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex-1 min-h-[220px]">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114902.03538954562!2d27.954599!3d-26.204103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c68f0406a51%3A0x238ac9d9b1d34041!2sPretoria%2C%20South%20Africa!5e0!3m2!1sen!2s!4v1700000000000"
+                  src="https://www.google.com/maps?q=NOBS+TECHNOLOGIES,+565+Servaas+St,+Pretoria+West,+Pretoria,+0183&output=embed" 
                   width="100%"
                   height="100%"
                   style={{ border: 0, minHeight: "220px" }}
