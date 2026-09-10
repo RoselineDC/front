@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,7 +19,8 @@ import {
   ShieldCheck,
   Heart,
   Clock,
-  Camera, Network, Radio, Phone, Cable, Monitor
+  Camera, Network, Radio, Phone, Cable, Monitor,
+  Loader2, CheckCircle, AlertCircle
 } from "lucide-react";
 
 /* ---------------- SERVICES ---------------- */
@@ -492,7 +494,7 @@ const projects = [
       "Full-scale CCTV deployment across a 5-building corporate campus with centralised NVR monitoring and remote access integration.",
     image: "/images/projects/acess-contorl.webp",
     icon: Camera,
-    location: "Johannesburg",
+    location: "Pretoria",
     year: "2024",
     tag: "CCTV",
     href: "/projects/sandton-campus-surveillance",
@@ -777,7 +779,7 @@ const contactInfo = [
   {
     icon: MapPin,
     label: "Location",
-    value: "Johannesburg, South Africa",
+    value: "Pretoria, South Africa",
     href: null,
   },
   {
@@ -789,6 +791,101 @@ const contactInfo = [
 ];
 
 export function Contact() {
+  const INITIAL_FORM = {
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  };
+
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validate = () => {
+    const errs: Record<string, string> = {};
+
+    if (!form.name.trim()) {
+      errs.name = "Full name is required";
+    }
+
+    if (!form.email.trim()) {
+      errs.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errs.email = "Enter a valid email address";
+    }
+
+    if (!form.phone.trim()) {
+      errs.phone = "Phone number is required";
+    }
+
+    if (!form.message.trim()) {
+      errs.message = "Message is required";
+    }
+
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!validate()) return;
+
+    setLoading(true);
+
+    // /api/contact accepts name/email/company/service/message,
+    // so the phone number is included inside the message body.
+    const message = [`Phone: ${form.phone}`, "", form.message].join("\n");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: "",
+          service: "Not specified",
+          message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Something went wrong. Please try again.");
+      }
+
+      setSubmitted(true);
+      setForm(INITIAL_FORM);
+      setFieldErrors({});
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="bg-black py-16 lg:py-24 relative overflow-hidden">
       {/* Subtle green glow accent */}
@@ -852,10 +949,27 @@ export function Contact() {
           </div>
 
           {/* ── RIGHT — Quick Enquiry Form ── */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-5">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white/5 border border-white/10 rounded-2xl p-8 flex flex-col gap-5"
+          >
             <h3 className="text-lg font-extrabold text-white uppercase tracking-wide">
               Quick <span className="text-[#7ac943]">Enquiry</span>
             </h3>
+
+            {submitted && (
+              <div className="flex items-center gap-2 bg-[#7ac943]/10 border border-[#7ac943]/40 text-white text-sm rounded-md px-4 py-3">
+                <CheckCircle size={18} className="text-[#7ac943] flex-shrink-0" />
+                <span>Thank you! We&apos;ll be in touch shortly.</span>
+              </div>
+            )}
+
+            {error && (
+              <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 text-red-300 text-sm rounded-md px-4 py-3">
+                <AlertCircle size={18} className="flex-shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
@@ -864,9 +978,16 @@ export function Contact() {
                 </label>
                 <input
                   type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
                   placeholder="John Doe"
+                  disabled={loading}
                   className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors"
                 />
+                {fieldErrors.name && (
+                  <span className="text-xs text-red-400">{fieldErrors.name}</span>
+                )}
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
@@ -874,9 +995,16 @@ export function Contact() {
                 </label>
                 <input
                   type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
                   placeholder="+27 000 000 000"
+                  disabled={loading}
                   className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors"
                 />
+                {fieldErrors.phone && (
+                  <span className="text-xs text-red-400">{fieldErrors.phone}</span>
+                )}
               </div>
             </div>
 
@@ -886,9 +1014,16 @@ export function Contact() {
               </label>
               <input
                 type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
                 placeholder="you@company.co.za"
+                disabled={loading}
                 className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors"
               />
+              {fieldErrors.email && (
+                <span className="text-xs text-red-400">{fieldErrors.email}</span>
+              )}
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -896,19 +1031,35 @@ export function Contact() {
                 Message
               </label>
               <textarea
+                name="message"
+                value={form.message}
+                onChange={handleChange}
                 rows={4}
                 placeholder="Tell us about your project or requirement..."
+                disabled={loading}
                 className="bg-white/5 border border-white/10 rounded-md px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-[#7ac943] transition-colors resize-none"
               />
+              {fieldErrors.message && (
+                <span className="text-xs text-red-400">{fieldErrors.message}</span>
+              )}
             </div>
 
             <button
-              type="button"
-              className="inline-flex items-center justify-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
+              type="submit"
+              disabled={loading}
+              className="inline-flex items-center justify-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] disabled:opacity-60 disabled:cursor-not-allowed transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
             >
-              Send Enquiry <ArrowRight size={16} />
+              {loading ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" /> Sending...
+                </>
+              ) : (
+                <>
+                  Send Enquiry <ArrowRight size={16} />
+                </>
+              )}
             </button>
-          </div>
+          </form>
 
         </div>
       </div>

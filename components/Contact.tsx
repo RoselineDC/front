@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle } from "lucide-react";
 import Navbar from "./Navbar";
 
 /**
@@ -16,8 +16,8 @@ const CONTACT_INFO = [
   {
     icon: Mail,
     label: "Email",
-    value: "info@nobstech.co.za",
-    href: "mailto:info@nobstech.co.za",
+    value: "info@nobstechnologies.co.za",
+    href: "mailto:info@nobstechnologies.co.za",
   },
   {
     icon: Phone,
@@ -28,7 +28,7 @@ const CONTACT_INFO = [
   {
     icon: MapPin,
     label: "Address",
-    value: "Johannesburg, South Africa",
+    value: "Pretoria, South Africa",
     href: "#",
   },
   {
@@ -50,6 +50,7 @@ export default function Contact() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -63,16 +64,35 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Something went wrong. Please try again.");
+      }
+
       setSubmitted(true);
-      setLoading(false);
       setFormData({ name: "", email: "", company: "", service: "", message: "" });
-      
-      // Reset after 5 seconds
+
+      // Reset success message after 5 seconds
       setTimeout(() => setSubmitted(false), 5000);
-    }, 1500);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -179,6 +199,18 @@ export default function Contact() {
         }
         .success-icon {
           animation: checkmark 0.6s cubic-bezier(.22,1,.36,1);
+        }
+
+        .error-message {
+          display: flex; align-items: center; gap: .75rem;
+          background: rgba(220,38,38,.06);
+          border: 1px solid rgba(220,38,38,.35);
+          color: #B91C1C;
+          padding: 1rem 1.25rem;
+          border-radius: .5rem;
+          font-size: .875rem;
+          animation: slideIn 0.4s cubic-bezier(.22,1,.36,1);
+          font-family: 'DM Sans', sans-serif;
         }
       `}</style>
 
@@ -335,6 +367,13 @@ export default function Contact() {
               <div className="success-message" style={{ marginBottom: "1.5rem" }}>
                 <CheckCircle size={20} className="success-icon" />
                 <span>Thank you! We'll be in touch shortly.</span>
+              </div>
+            )}
+
+            {error && (
+              <div className="error-message" style={{ marginBottom: "1.5rem" }}>
+                <AlertCircle size={20} />
+                <span>{error}</span>
               </div>
             )}
 

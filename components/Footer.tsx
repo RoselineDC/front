@@ -100,7 +100,7 @@ export function Footer() {
                   <MapPin className="w-3.5 h-3.5 text-[#7ac943]" strokeWidth={1.5} />
                 </span>
                 <span className="text-xs text-white/60">
-                  Johannesburg, South Africa
+                  Pretoria, South Africa
                 </span>
               </div>
             </div>

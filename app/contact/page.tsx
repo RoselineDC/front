@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -8,7 +9,9 @@ import {
   MapPin,
   Clock,
   MessageCircle,
-  
+  Loader2,
+  CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import Navbar from "@/components/Navbar";
@@ -39,7 +42,7 @@ const contactDetails = [
   {
     icon: MapPin,
     label: "Location",
-    value: "Johannesburg, Gauteng",
+    value: "Pretoria, Gauteng",
     href: null,
     description: "Serving clients across South Africa and the region.",
   },
@@ -57,7 +60,89 @@ const socials = [
   { icon: FaLinkedin, label: "LinkedIn", href: "https://linkedin.com" },
 ];
 
+const INITIAL_FORM = {
+  name: "",
+  company: "",
+  email: "",
+  phone: "",
+  service: "",
+  message: "",
+};
+
 export default function ContactPage() {
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validate = () => {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = "Full name is required";
+    if (!form.email.trim()) {
+      errs.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errs.email = "Enter a valid email address";
+    }
+    if (!form.phone.trim()) errs.phone = "Phone number is required";
+    if (!form.message.trim()) errs.message = "Message is required";
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!validate()) return;
+
+    setLoading(true);
+
+    // /api/contact only has name/email/company/service/message fields,
+    // so fold the phone number into the message body.
+    const message = [`Phone: ${form.phone}`, "", form.message].join("\n");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          service: form.service || "Not specified",
+          message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Something went wrong. Please try again.");
+      }
+
+      setSubmitted(true);
+      setForm(INITIAL_FORM);
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="bg-[#f5f6f7] min-h-screen">
 
@@ -136,13 +221,30 @@ export default function ContactPage() {
           <div className="grid lg:grid-cols-2 gap-6">
 
             {/* ── LEFT — Full Form ── */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col gap-5">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col gap-5"
+            >
               <div>
                 <h3 className="text-xl font-extrabold text-gray-900 uppercase tracking-wide mb-1">
                   Send Us A <span className="text-[#7ac943]">Message</span>
                 </h3>
                 <p className="text-xs text-gray-400">Fill in the form and we will get back to you shortly.</p>
               </div>
+
+              {submitted && (
+                <div className="flex items-center gap-2 bg-[#7ac943]/10 border border-[#7ac943]/40 text-gray-900 text-sm rounded-md px-4 py-3">
+                  <CheckCircle size={18} className="text-[#7ac943] flex-shrink-0" />
+                  <span>Thank you! We&apos;ll be in touch shortly.</span>
+                </div>
+              )}
+
+              {error && (
+                <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-4 py-3">
+                  <AlertCircle size={18} className="flex-shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
@@ -151,9 +253,16 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
                     placeholder="John Doe"
+                    disabled={loading}
                     className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
                   />
+                  {fieldErrors.name && (
+                    <span className="text-xs text-red-600">{fieldErrors.name}</span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
@@ -161,7 +270,11 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="text"
+                    name="company"
+                    value={form.company}
+                    onChange={handleChange}
                     placeholder="Your Company"
+                    disabled={loading}
                     className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
                   />
                 </div>
@@ -174,9 +287,16 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
                     placeholder="you@company.co.za"
+                    disabled={loading}
                     className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
                   />
+                  {fieldErrors.email && (
+                    <span className="text-xs text-red-600">{fieldErrors.email}</span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
@@ -184,9 +304,16 @@ export default function ContactPage() {
                   </label>
                   <input
                     type="tel"
+                    name="phone"
+                    value={form.phone}
+                    onChange={handleChange}
                     placeholder="+27 000 000 000"
+                    disabled={loading}
                     className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors"
                   />
+                  {fieldErrors.phone && (
+                    <span className="text-xs text-red-600">{fieldErrors.phone}</span>
+                  )}
                 </div>
               </div>
 
@@ -194,7 +321,13 @@ export default function ContactPage() {
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                   Service of Interest
                 </label>
-                <select className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-[#7ac943] transition-colors bg-white appearance-none">
+                <select
+                  name="service"
+                  value={form.service}
+                  onChange={handleChange}
+                  disabled={loading}
+                  className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-[#7ac943] transition-colors bg-white appearance-none"
+                >
                   <option value="">Select a service...</option>
                   <option>CCTV & Surveillance</option>
                   <option>Access Control</option>
@@ -213,19 +346,35 @@ export default function ContactPage() {
                   Message <span className="text-[#7ac943]">*</span>
                 </label>
                 <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
                   rows={5}
                   placeholder="Tell us about your project, requirement or question..."
+                  disabled={loading}
                   className="border border-gray-200 rounded-md px-4 py-3 text-sm text-gray-800 placeholder:text-gray-300 focus:outline-none focus:border-[#7ac943] transition-colors resize-none"
                 />
+                {fieldErrors.message && (
+                  <span className="text-xs text-red-600">{fieldErrors.message}</span>
+                )}
               </div>
 
               <button
-                type="button"
-                className="inline-flex items-center justify-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
+                type="submit"
+                disabled={loading}
+                className="inline-flex items-center justify-center gap-2 bg-[#7ac943] hover:bg-[#6ab535] disabled:opacity-60 disabled:cursor-not-allowed transition-colors text-white text-sm font-bold tracking-wide uppercase px-7 py-4 rounded-md"
               >
-                Send Message <ArrowRight size={16} />
+                {loading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" /> Sending...
+                  </>
+                ) : (
+                  <>
+                    Send Message <ArrowRight size={16} />
+                  </>
+                )}
               </button>
-            </div>
+            </form>
 
             {/* ── RIGHT — Hours + Map + Socials ── */}
             <div className="flex flex-col gap-5">
@@ -255,7 +404,7 @@ export default function ContactPage() {
               {/* Google Map Embed */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex-1 min-h-[220px]">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114902.03538954562!2d27.954599!3d-26.204103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c68f0406a51%3A0x238ac9d9b1d34041!2sJohannesburg%2C%20South%20Africa!5e0!3m2!1sen!2s!4v1700000000000"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d114902.03538954562!2d27.954599!3d-26.204103!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c68f0406a51%3A0x238ac9d9b1d34041!2sPretoria%2C%20South%20Africa!5e0!3m2!1sen!2s!4v1700000000000"
                   width="100%"
                   height="100%"
                   style={{ border: 0, minHeight: "220px" }}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { X } from "lucide-react";
+import { X, Loader2 } from "lucide-react";
 import { Product } from "@/types/product";
 
 interface EnquiryModalProps {
@@ -29,6 +29,8 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
   const [form, setForm] = useState<FormData>(INITIAL_FORM);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Reset state when a new product is selected
@@ -37,6 +39,7 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
       setForm(INITIAL_FORM);
       setErrors({});
       setSubmitted(false);
+      setSubmitError(null);
     }
   }, [product]);
 
@@ -70,33 +73,53 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validate()) return;
 
-    const subject = `Product enquiry: ${product.name}`;
-    const body = [
-      `Product Enquiry — NOBS Technologies Shop`,
-      ``,
+    setSubmitError(null);
+    setLoading(true);
+
+    // Build a message body that carries the product context, since
+    // /api/contact only has name/email/company/service/message fields.
+    const message = [
       `Product: ${product.name}`,
       `Category: ${product.category}`,
       `Listed price: ${product.price}`,
-      ``,
-      `--- Enquirer details ---`,
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
       `Phone: ${form.phone || "Not provided"}`,
       `Quantity needed: ${form.quantity || "Not specified"}`,
       ``,
-      `--- Message ---`,
       form.message || "No additional message.",
     ].join("\n");
 
-    const mailto = `mailto:sales@nobstechnologies.co.za?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: "",
+          service: `Product Enquiry — ${product.name}`,
+          message,
+        }),
+      });
 
-    window.open(mailto, "_blank");
-    setSubmitted(true);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Something went wrong. Please try again.");
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange =
@@ -147,6 +170,12 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
         ) : (
           /* Form */
           <div className="modal-form">
+            {submitError && (
+              <p className="form-error" role="alert" style={{ marginBottom: "0.5rem" }}>
+                {submitError}
+              </p>
+            )}
+
             <div className="form-group">
               <label htmlFor="enq-name">Full name *</label>
               <input
@@ -156,6 +185,7 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
                 value={form.name}
                 onChange={handleChange("name")}
                 autoComplete="name"
+                disabled={loading}
               />
               {errors.name && (
                 <span className="form-error">{errors.name}</span>
@@ -171,6 +201,7 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
                 value={form.email}
                 onChange={handleChange("email")}
                 autoComplete="email"
+                disabled={loading}
               />
               {errors.email && (
                 <span className="form-error">{errors.email}</span>
@@ -186,6 +217,7 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
                 value={form.phone}
                 onChange={handleChange("phone")}
                 autoComplete="tel"
+                disabled={loading}
               />
             </div>
 
@@ -197,6 +229,7 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
                 placeholder="e.g. 5 units"
                 value={form.quantity}
                 onChange={handleChange("quantity")}
+                disabled={loading}
               />
             </div>
 
@@ -208,15 +241,22 @@ export default function EnquiryModal({ product, onClose }: EnquiryModalProps) {
                 value={form.message}
                 onChange={handleChange("message")}
                 rows={4}
+                disabled={loading}
               />
             </div>
 
-            <button className="submit-btn" onClick={handleSubmit}>
-              Send enquiry
+            <button className="submit-btn" onClick={handleSubmit} disabled={loading}>
+              {loading ? (
+                <>
+                  <Loader2 size={16} className="spin" /> Sending...
+                </>
+              ) : (
+                "Send enquiry"
+              )}
             </button>
 
             <p className="modal-footer-note">
-              Your enquiry goes directly to sales@nobstechnologies.co.za
+              Your enquiry goes directly to info@nobstechnologies.co.za
             </p>
           </div>
         )}
